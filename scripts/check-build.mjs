@@ -104,9 +104,9 @@ for (const [collection, urlBase] of [
 const robots = existsSync(join(DIST, 'robots.txt'))
   ? readFileSync(join(DIST, 'robots.txt'), 'utf8')
   : '';
-robots.includes('Disallow: /admin')
-  ? pass('robots.txt disallows /admin')
-  : fail('robots.txt does not disallow /admin');
+/Disallow:\s*\S*\/admin/.test(robots)
+  ? pass('robots.txt disallows the admin path')
+  : fail('robots.txt does not disallow the admin path');
 
 const sitemaps = distFiles.filter((f) => f.includes('sitemap') && f.endsWith('.xml'));
 const sitemapText = sitemaps.map((f) => readFileSync(f, 'utf8')).join('');
@@ -121,7 +121,35 @@ existsSync(adminHtml) && readFileSync(adminHtml, 'utf8').includes('noindex')
   ? pass('admin page carries a noindex robots tag')
   : fail('admin page missing or has no noindex tag');
 
-/* 4 — performance budget --------------------------------------------------- */
+/* 4 — every internal link carries the base prefix --------------------------- */
+
+// On a subpath deploy a literal href="/projects" silently 404s. This catches any
+// link that skipped the url() helper.
+const BASE = (readFileSync(join(ROOT, 'astro.config.mjs'), 'utf8').match(
+  /base:\s*'([^']+)'/,
+) ?? [])[1];
+
+if (!BASE || BASE === '/') {
+  pass('site is served from the root — no base prefix needed');
+} else {
+  const knownRoutes = ['projects', 'blog', 'about', 'experience', 'contact', 'resume'];
+  const offenders = [];
+  for (const file of htmlFiles) {
+    const html = readFileSync(file, 'utf8');
+    for (const m of html.matchAll(/(?:href|src)="\/([a-zA-Z0-9_-]+)/g)) {
+      if (knownRoutes.includes(m[1]) && !html.includes(`"${BASE}/${m[1]}`)) {
+        offenders.push(`${relative(DIST, file)} → /${m[1]}`);
+      }
+    }
+  }
+  offenders.length === 0
+    ? pass(`all internal links carry the '${BASE}' base prefix`)
+    : [...new Set(offenders)]
+        .slice(0, 5)
+        .forEach((o) => fail(`link missing base prefix: ${o}`));
+}
+
+/* 5 — performance budget --------------------------------------------------- */
 
 const oversized = htmlFiles
   .map((f) => ({ f, size: gzipSync(readFileSync(f)).length }))

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
+import { url } from '../lib/url';
 
 // A static site has no server to post to. When a form endpoint is configured the
 // form renders; until then the page shows contact details rather than a form
@@ -89,7 +90,7 @@ const endpoint = site.contact.formEndpoint;
 
     <section class="section">
       <div class="btn-row">
-        <a class="btn btn--primary" href={site.resume} download
+        <a class="btn btn--primary" href={url(site.resume)} download
           >{site.resumeLabel}</a
         >
       </div>

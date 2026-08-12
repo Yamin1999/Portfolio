@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 import skills from '../data/skills.json';
 import { getEducation, getExperience, formatRange } from '../lib/content';
+import { url } from '../lib/url';
 
 const education = site.sections.showEducation ? await getEducation() : [];
 const roles = await getExperience();
@@ -131,10 +132,10 @@ const paragraphs = site.bio.split('\n\n');
 
     <section class="section">
       <div class="btn-row">
-        <a class="btn btn--primary" href={site.resume} download
+        <a class="btn btn--primary" href={url(site.resume)} download
           >{site.resumeLabel}</a
         >
-        <a class="btn" href="/projects">View projects</a>
+        <a class="btn" href={url('/projects')}>View projects</a>
       </div>
     </section>
   </div>

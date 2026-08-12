@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 import { getExperience, formatRange, formatDuration } from '../lib/content';
+import { url } from '../lib/url';
 
 const roles = await getExperience();
 ---
@@ -62,10 +63,10 @@ const roles = await getExperience();
 
     <section class="section">
       <div class="btn-row">
-        <a class="btn btn--primary" href={site.resume} download
+        <a class="btn btn--primary" href={url(site.resume)} download
           >{site.resumeLabel}</a
         >
-        <a class="btn" href="/projects">See the work</a>
+        <a class="btn" href={url('/projects')}>See the work</a>
       </div>
     </section>
   </div>

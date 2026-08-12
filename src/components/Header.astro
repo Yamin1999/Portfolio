@@ -1,9 +1,14 @@
 ---
 import site from '../data/site.json';
+import { url } from '../lib/url';
 
-const path = Astro.url.pathname;
-const isCurrent = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+// Compare against the based path — Astro.url.pathname includes the base prefix,
+// so a bare '/about' would never match on a subpath deploy.
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isCurrent = (href: string) => {
+  const target = url(href).replace(/\/$/, '');
+  return href === '/' ? path === target : path.startsWith(target);
+};
 
 const links = [
   { href: '/', label: 'Home', show: true },
@@ -17,12 +22,12 @@ const links = [
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="brand" href="/">{site.name}</a>
+    <a class="brand" href={url('/')}>{site.name}</a>
     <nav class="site-nav" aria-label="Main">
       {
         links.map((link) => (
           <a
-            href={link.href}
+            href={url(link.href)}
             aria-current={isCurrent(link.href) ? 'page' : undefined}
           >
             {link.label}

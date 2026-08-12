@@ -4,6 +4,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import site from '../data/site.json';
 import skills from '../data/skills.json';
 import { getFeaturedProjects, getPosts, formatDate } from '../lib/content';
+import { url } from '../lib/url';
 
 const projects = await getFeaturedProjects(3);
 const posts = site.sections.showBlog ? (await getPosts()).slice(0, 2) : [];
@@ -55,8 +56,8 @@ const jsonLd = {
       <h1 class="hero__name">{site.name}</h1>
       <p class="hero__intro">{site.heroIntro}</p>
       <div class="btn-row">
-        <a class="btn btn--primary" href="/projects">View projects</a>
-        <a class="btn" href={site.resume} download>{site.resumeLabel}</a>
+        <a class="btn btn--primary" href={url('/projects')}>View projects</a>
+        <a class="btn" href={url(site.resume)} download>{site.resumeLabel}</a>
         <a class="btn" href={site.social.github} rel="me noopener">GitHub</a>
         <a class="btn" href={site.social.linkedin} rel="me noopener">LinkedIn</a>
       </div>
@@ -65,7 +66,7 @@ const jsonLd = {
     <section class="section">
       <div class="section__head">
         <h2>Selected projects</h2>
-        <a href="/projects">All projects →</a>
+        <a href={url('/projects')}>All projects →</a>
       </div>
       <div class="card-grid">
         {projects.map((project) => <ProjectCard project={project} />)}
@@ -82,7 +83,7 @@ const jsonLd = {
     <section class="section">
       <div class="section__head">
         <h2>Skills</h2>
-        <a href="/about#skills">Full list →</a>
+        <a href={url('/about#skills')}>Full list →</a>
       </div>
       <div>
         {
@@ -108,11 +109,11 @@ const jsonLd = {
         <section class="section">
           <div class="section__head">
             <h2>Engineering notes</h2>
-            <a href="/blog">All notes →</a>
+            <a href={url('/blog')}>All notes →</a>
           </div>
           <div class="post-list">
             {posts.map((post) => (
-              <a class="post-item" href={`/blog/${post.id}`}>
+              <a class="post-item" href={url(`/blog/${post.id}`)}>
                 <span class="mono muted">
                   {formatDate(post.data.publishedAt)}
                 </span>
@@ -132,7 +133,7 @@ const jsonLd = {
       <p class="lede">
         Open to embedded software and systems roles. The fastest way to reach me
         is <a href={`mailto:${site.email}`}>{site.email}</a>, or use the <a
-          href="/contact">contact form</a
+          href={url('/contact')}>contact form</a
         >.
       </p>
     </section>

@@ -74,19 +74,21 @@ public/uploads/                Images uploaded through the CMS
 
 ## Going live
 
-Configured for **https://yamin1999.github.io**, served from the root of a repo
-named `Yamin1999.github.io`.
+Configured for **https://yamin1999.github.io/Portfolio/**, deployed from
+[github.com/Yamin1999/Portfolio](https://github.com/Yamin1999/Portfolio).
+
+Because it's a project repo rather than a `<username>.github.io` repo, the site
+is served from a **subpath**. That's handled: `base: '/Portfolio'` is set in
+`astro.config.mjs`, and every internal link goes through `url()` in
+[`src/lib/url.ts`](src/lib/url.ts) so it picks the prefix up automatically.
+`npm run verify` fails the build if any link skips it.
+
+**Write internal links as `href={url('/projects')}`, never `href="/projects"`.**
+A bare link silently 404s in production while working fine in dev.
 
 ### One-time setup
 
-```bash
-# 1. Create the repo on GitHub named exactly: Yamin1999.github.io  (public)
-# 2. Push
-git remote add origin https://github.com/Yamin1999/Yamin1999.github.io.git
-git push -u origin main
-```
-
-Then in the repo: **Settings → Pages → Source → "GitHub Actions"**.
+In the repo: **Settings → Pages → Source → "GitHub Actions"**.
 
 The workflow in `.github/workflows/deploy.yml` builds, runs the checks, and
 deploys. First deploy takes a couple of minutes; after that every push to `main`
@@ -104,15 +106,16 @@ password. The same token works for the CMS.
   [Formspree](https://formspree.io) URL to switch the form on. Left empty, the
   contact page shows your email address instead of a form that would silently
   swallow messages.
-- **Custom domain** — if you buy one, change `site` in `astro.config.mjs`, the
-  `Sitemap:` line in `public/robots.txt`, and add it under Settings → Pages.
+- **Custom domain** — if you buy one, set `site` to the domain and `base` to
+  `'/'` in `astro.config.mjs`, update `public/robots.txt`, and add the domain
+  under Settings → Pages. Everything else follows automatically.
 
-### Note on renaming
+### Note on `robots.txt`
 
-The repo name and the URL are tied together. `Yamin1999.github.io` serves from
-the root, which is why no `base` path is configured. Renaming the repo to
-anything else moves the site to a subpath and every internal link breaks until
-`base` is set in `astro.config.mjs` and threaded through each link.
+On a subpath deploy this file is served at `/Portfolio/robots.txt`, and crawlers
+only read the one at the domain root — so it has no effect today. The admin panel
+is kept out of search by its own `noindex` meta tag and by being excluded from
+the sitemap, which is what actually matters. A custom domain fixes this properly.
 
 ---
 

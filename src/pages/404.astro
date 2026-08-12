@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getFeaturedProjects } from '../lib/content';
+import { url } from '../lib/url';
 
 const projects = await getFeaturedProjects(2);
 ---
@@ -22,8 +23,8 @@ const projects = await getFeaturedProjects(2);
     </div>
 
     <div class="btn-row">
-      <a class="btn btn--primary" href="/">Home</a>
-      <a class="btn" href="/projects">All projects</a>
+      <a class="btn btn--primary" href={url('/')}>Home</a>
+      <a class="btn" href={url('/projects')}>All projects</a>
     </div>
   </div>
 </Base>

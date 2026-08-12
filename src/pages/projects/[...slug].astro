@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { getProjects, formatRange } from '../../lib/content';
+import { url } from '../../lib/url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -141,7 +142,7 @@ const jsonLd = {
           <ul class="bullets prose-width">
             {related.map((item) => (
               <li>
-                <a href={`/projects/${item.id}`}>{item.data.title}</a>
+                <a href={url(`/projects/${item.id}`)}>{item.data.title}</a>
               </li>
             ))}
           </ul>
@@ -152,12 +153,12 @@ const jsonLd = {
     <nav class="pager" aria-label="Project navigation">
       {
         previous ? (
-          <a href={`/projects/${previous.id}`}>← {previous.data.title}</a>
+          <a href={url(`/projects/${previous.id}`)}>← {previous.data.title}</a>
         ) : (
           <span />
         )
       }
-      {next && <a href={`/projects/${next.id}`}>{next.data.title} →</a>}
+      {next && <a href={url(`/projects/${next.id}`)}>{next.data.title} →</a>}
     </nav>
   </div>
 </Base>

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getPosts, formatDate, readingMinutes } from '../../lib/content';
+import { url } from '../../lib/url';
 
 const posts = await getPosts();
 ---
@@ -25,7 +26,7 @@ const posts = await getPosts();
       ) : (
         <div class="post-list">
           {posts.map((post) => (
-            <a class="post-item" href={`/blog/${post.id}`}>
+            <a class="post-item" href={url(`/blog/${post.id}`)}>
               <span class="mono muted">
                 {formatDate(post.data.publishedAt)}
                 <span class="skill-group__sep">·</span>

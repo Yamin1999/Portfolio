@@ -1,5 +1,9 @@
+# Note: on a project-path deploy this file is served at /Portfolio/robots.txt,
+# which crawlers do NOT read — only the domain root counts. The admin panel is
+# kept out of search by its own noindex meta tag and by being excluded from the
+# sitemap, so this file is belt-and-braces until a custom domain is in place.
 User-agent: *
 Allow: /
-Disallow: /admin
+Disallow: /Portfolio/admin
 
-Sitemap: https://yamin1999.github.io/sitemap-index.xml
+Sitemap: https://yamin1999.github.io/Portfolio/sitemap-index.xml

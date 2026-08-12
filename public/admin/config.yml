@@ -10,7 +10,7 @@
 backend:
   name: github
   # Must be "owner/repo" — a full URL here will fail to load.
-  repo: Yamin1999/yamin1999.github.io
+  repo: Yamin1999/Portfolio
   branch: main
   commit_messages:
     create: 'content: create {{collection}} "{{slug}}"'
