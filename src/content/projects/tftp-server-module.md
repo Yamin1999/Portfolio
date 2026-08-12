@@ -19,7 +19,7 @@ standards:
   - RFC 1350
   - RFC 2348
   - RFC 7440
-repo: https://github.com/
+repo: https://github.com/Yamin1999/TFTP-Server-Panda
 featured: true
 order: 1
 published: true

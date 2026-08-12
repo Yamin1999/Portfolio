@@ -72,44 +72,47 @@ public/uploads/                Images uploaded through the CMS
 
 ---
 
-## Before you go live
+## Going live
 
-1. **`public/admin/config.yml`** — set `repo:` to `your-username/portfolio`.
-   The CMS cannot save until this is right.
-2. **`astro.config.mjs`** — set `site:` to your real domain. It drives canonical
-   URLs, Open Graph tags and the sitemap.
-3. **`public/robots.txt`** — update the `Sitemap:` line to the same domain.
-4. **`src/data/site.json`** — replace the placeholder GitHub and LinkedIn URLs
-   with your actual profiles. Codeforces and LeetCode are already correct.
-5. **Contact form** — set `contact.formEndpoint` to a
-   [Formspree](https://formspree.io) URL to switch the form on. Left empty, the
-   contact page shows your email address instead of a form that would silently
-   swallow messages.
+Configured for **https://yamin1999.github.io**, served from the root of a repo
+named `Yamin1999.github.io`.
 
----
+### One-time setup
 
-## Deploying
+```bash
+# 1. Create the repo on GitHub named exactly: Yamin1999.github.io  (public)
+# 2. Push
+git remote add origin https://github.com/Yamin1999/Yamin1999.github.io.git
+git push -u origin main
+```
 
-### Cloudflare Pages (recommended)
+Then in the repo: **Settings → Pages → Source → "GitHub Actions"**.
 
-Free, custom domains included, no public-repo requirement.
+The workflow in `.github/workflows/deploy.yml` builds, runs the checks, and
+deploys. First deploy takes a couple of minutes; after that every push to `main`
+redeploys — including the commits the CMS makes when you save from `/admin`.
 
-1. Push this repo to GitHub.
-2. Cloudflare dashboard → Workers & Pages → Create → Pages → connect the repo.
-3. Build command `npm run build`, output directory `dist`.
-4. Add your custom domain under the project's Custom Domains tab.
+If a push asks for a password, use a personal access token, not your account
+password. The same token works for the CMS.
 
-Every push to `main` redeploys — including the commits the CMS makes when you
-save, so publishing from `/admin` just works.
+### Still open
 
-### GitHub Pages (alternative)
+- **CV PDF** — `public/resume/Yamin_Haque_Resume.pdf` is publicly downloadable
+  and contains your phone number and your reference's name, phone and email.
+  Export a web version without the References section and replace it.
+- **Contact form** — set `contact.formEndpoint` in `src/data/site.json` to a
+  [Formspree](https://formspree.io) URL to switch the form on. Left empty, the
+  contact page shows your email address instead of a form that would silently
+  swallow messages.
+- **Custom domain** — if you buy one, change `site` in `astro.config.mjs`, the
+  `Sitemap:` line in `public/robots.txt`, and add it under Settings → Pages.
 
-`.github/workflows/deploy.yml` is ready to go: enable Settings → Pages → Source
-→ "GitHub Actions".
+### Note on renaming
 
-Two caveats: on the free plan Pages sites must come from a **public** repo, and
-if the repo isn't named `<username>.github.io` the site is served from a
-subpath, so you must set `base: '/<repo-name>'` in `astro.config.mjs`.
+The repo name and the URL are tied together. `Yamin1999.github.io` serves from
+the root, which is why no `base` path is configured. Renaming the repo to
+anything else moves the site to a subpath and every internal link breaks until
+`base` is set in `astro.config.mjs` and threaded through each link.
 
 ---
 

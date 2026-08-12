@@ -1,13 +1,11 @@
-# Optional: deploy to GitHub Pages.
+# Deploys to GitHub Pages on every push to main — including the commits Sveltia
+# CMS makes when you save from /admin.
 #
-# Cloudflare Pages is the recommended host (see README) and needs no workflow —
-# it builds from the repo automatically. Keep this file if you'd rather use
-# GitHub Pages, or delete it.
+# One-time setup: Settings → Pages → Source → "GitHub Actions".
 #
-# Before enabling: Settings → Pages → Source → "GitHub Actions".
-# If the repo is NOT named `<username>.github.io`, the site is served from a
-# subpath, so set `base: '/<repo-name>'` in astro.config.mjs or every link
-# will 404.
+# This repo is named Yamin1999.github.io, so the site is served from the root and
+# no `base` path is needed in astro.config.mjs. That stops being true if the repo
+# is ever renamed.
 
 name: Deploy to GitHub Pages
 

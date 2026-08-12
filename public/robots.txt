@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://yaminhaque.com/sitemap-index.xml
+Sitemap: https://yamin1999.github.io/sitemap-index.xml
