@@ -1,0 +1,112 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+
+// Filtering is done client-side over already-rendered cards: it keeps the page
+// a single static file while staying instant and shareable via the hash.
+const categories = [...new Set(projects.map((p) => p.data.category))].sort();
+---
+
+<Base
+  title="Projects"
+  description="Embedded software, Layer 2 networking and systems programming projects."
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">Projects</p>
+      <h1>Things I've built</h1>
+      <p class="lede">
+        Carrier Ethernet protocol work, low-level C on ARM, and one research
+        project. Professional projects are described at the level of approach and
+        technique — product internals stay with the employer.
+      </p>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="Filter projects by category">
+      <button class="filter" data-category="all" aria-current="true">All</button>
+      {
+        categories.map((category) => (
+          <button class="filter" data-category={category} aria-current="false">
+            {category}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="card-grid" id="project-grid">
+      {
+        projects.map((project) => (
+          <div class="card-slot" data-category={project.data.category}>
+            <ProjectCard project={project} />
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="muted mono" id="empty-state" hidden>
+      No projects in that category yet.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .filter {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--ink-muted);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .filter:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .filter[aria-current='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ground);
+  }
+
+  .card-slot {
+    display: flex;
+  }
+
+  .card-slot > :global(.card) {
+    flex: 1;
+  }
+</style>
+
+<script>
+  const buttons =
+    document.querySelectorAll<HTMLButtonElement>('.filter-bar .filter');
+  const slots = document.querySelectorAll<HTMLElement>('.card-slot');
+  const empty = document.getElementById('empty-state');
+
+  function apply(category: string) {
+    let visible = 0;
+    slots.forEach((slot) => {
+      const match = category === 'all' || slot.dataset.category === category;
+      slot.hidden = !match;
+      if (match) visible += 1;
+    });
+    buttons.forEach((button) =>
+      button.setAttribute(
+        'aria-current',
+        String(button.dataset.category === category),
+      ),
+    );
+    if (empty) empty.hidden = visible > 0;
+  }
+
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => apply(button.dataset.category!)),
+  );
+</script>

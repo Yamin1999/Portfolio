@@ -1,0 +1,43 @@
+---
+import site from '../data/site.json';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+
+const links = [
+  { href: '/', label: 'Home', show: true },
+  { href: '/about', label: 'About', show: true },
+  { href: '/experience', label: 'Experience', show: site.sections.showExperience },
+  { href: '/projects', label: 'Projects', show: true },
+  { href: '/blog', label: 'Notes', show: site.sections.showBlog },
+  { href: '/contact', label: 'Contact', show: true },
+].filter((link) => link.show);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/">{site.name}</a>
+    <nav class="site-nav" aria-label="Main">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isCurrent(link.href) ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>

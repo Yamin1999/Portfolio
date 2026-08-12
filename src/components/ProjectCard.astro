@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatRange } from '../lib/content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, category, tech, started, ended, ongoing } = project.data;
+---
+
+<a class="card" href={`/projects/${project.id}`}>
+  <div class="card__meta">
+    <span class="eyebrow">{category}</span>
+    <span class="mono muted">{formatRange(started, ended, ongoing)}</span>
+  </div>
+  <h3 class="card__title">{title}</h3>
+  <p class="card__summary">{summary}</p>
+  {
+    tech.length > 0 && (
+      <div class="chips">
+        {tech.slice(0, 4).map((item) => (
+          <span class="chip">{item}</span>
+        ))}
+        {tech.length > 4 && <span class="chip">+{tech.length - 4}</span>}
+      </div>
+    )
+  }
+</a>

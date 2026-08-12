@@ -1,0 +1,28 @@
+---
+import site from '../data/site.json';
+
+const links = [
+  { href: site.social.github, label: 'GitHub' },
+  { href: site.social.linkedin, label: 'LinkedIn' },
+  { href: site.social.codeforces, label: 'Codeforces' },
+  { href: site.social.leetcode, label: 'LeetCode' },
+  { href: `mailto:${site.email}`, label: 'Email' },
+].filter((link) => link.href);
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>© {year} {site.name} · {site.location}</p>
+    <nav class="footer-links" aria-label="Elsewhere">
+      {
+        links.map((link) => (
+          <a href={link.href} rel="me noopener">
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</footer>

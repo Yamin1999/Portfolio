@@ -1,0 +1,51 @@
+{
+  "groups": [
+    {
+      "category": "Programming",
+      "items": ["C", "Embedded C", "C++", "PHP"]
+    },
+    {
+      "category": "Systems & RTOS",
+      "items": ["Embedded Linux", "Linux", "VxWorks", "FreeRTOS"]
+    },
+    {
+      "category": "Microcontrollers",
+      "items": ["STM32", "ARM", "Processor low-power modes"]
+    },
+    {
+      "category": "Peripherals & Serial",
+      "items": ["GPIO", "SPI", "I2C", "UART", "Ethernet"]
+    },
+    {
+      "category": "Networking",
+      "items": [
+        "TCP",
+        "UDP",
+        "TFTP",
+        "VLAN",
+        "STP / RSTP / MSTP",
+        "LLDP",
+        "ERPS (G.8032)",
+        "EAPS",
+        "SNMP",
+        "CFM / OAM"
+      ]
+    },
+    {
+      "category": "Messaging",
+      "items": ["MQTT", "HTTP / HTTPS"]
+    },
+    {
+      "category": "Debugging & Tools",
+      "items": ["GDB", "Wireshark", "trace-cmd", "KernelShark", "ftrace", "Scapy"]
+    },
+    {
+      "category": "Web",
+      "items": ["HTML", "CSS", "Bootstrap", "jQuery", "JavaScript"]
+    },
+    {
+      "category": "Data & Version Control",
+      "items": ["MySQL", "Git", "SVN"]
+    }
+  ]
+}

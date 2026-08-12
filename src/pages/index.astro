@@ -1,0 +1,140 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import site from '../data/site.json';
+import skills from '../data/skills.json';
+import { getFeaturedProjects, getPosts, formatDate } from '../lib/content';
+
+const projects = await getFeaturedProjects(3);
+const posts = site.sections.showBlog ? (await getPosts()).slice(0, 2) : [];
+
+// Featured skill groups only — the full list lives on /about.
+const skillDigest = skills.groups.filter((group) =>
+  ['Programming', 'Systems & RTOS', 'Networking', 'Debugging & Tools'].includes(
+    group.category,
+  ),
+);
+
+const sameAs = [
+  site.social.github,
+  site.social.linkedin,
+  site.social.codeforces,
+  site.social.leetcode,
+].filter(Boolean);
+
+// Person markup is what ties this site to your other profiles in search results.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.title,
+  email: `mailto:${site.email}`,
+  url: Astro.site?.href,
+  address: { '@type': 'PostalAddress', addressLocality: site.location },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Rajshahi University of Engineering & Technology',
+  },
+  knowsAbout: [
+    'Embedded C',
+    'Embedded Linux',
+    'Layer 2 networking',
+    'Carrier Ethernet',
+    'ERPS (G.8032)',
+    'VxWorks',
+    'Kernel tracing',
+  ],
+  sameAs,
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <div class="container sections">
+    <section class="hero">
+      <p class="hero__title">{site.title}</p>
+      <h1 class="hero__name">{site.name}</h1>
+      <p class="hero__intro">{site.heroIntro}</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/projects">View projects</a>
+        <a class="btn" href={site.resume} download>{site.resumeLabel}</a>
+        <a class="btn" href={site.social.github} rel="me noopener">GitHub</a>
+        <a class="btn" href={site.social.linkedin} rel="me noopener">LinkedIn</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Selected projects</h2>
+        <a href="/projects">All projects →</a>
+      </div>
+      <div class="card-grid">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Current focus</h2>
+      </div>
+      <p class="lede">{site.currentFocus}</p>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Skills</h2>
+        <a href="/about#skills">Full list →</a>
+      </div>
+      <div>
+        {
+          skillDigest.map((group) => (
+            <div class="skill-group">
+              <span class="eyebrow">{group.category}</span>
+              <p class="skill-group__items">
+                {group.items.map((item, index) => (
+                  <>
+                    {index > 0 && <span class="skill-group__sep">·</span>}
+                    {item}
+                  </>
+                ))}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      posts.length > 0 && (
+        <section class="section">
+          <div class="section__head">
+            <h2>Engineering notes</h2>
+            <a href="/blog">All notes →</a>
+          </div>
+          <div class="post-list">
+            {posts.map((post) => (
+              <a class="post-item" href={`/blog/${post.id}`}>
+                <span class="mono muted">
+                  {formatDate(post.data.publishedAt)}
+                </span>
+                <h3 class="post-item__title">{post.data.title}</h3>
+                <p class="card__summary">{post.data.excerpt}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Get in touch</h2>
+      </div>
+      <p class="lede">
+        Open to embedded software and systems roles. The fastest way to reach me
+        is <a href={`mailto:${site.email}`}>{site.email}</a>, or use the <a
+          href="/contact">contact form</a
+        >.
+      </p>
+    </section>
+  </div>
+</Base>

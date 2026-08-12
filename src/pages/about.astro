@@ -1,0 +1,141 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import skills from '../data/skills.json';
+import { getEducation, getExperience, formatRange } from '../lib/content';
+
+const education = site.sections.showEducation ? await getEducation() : [];
+const roles = await getExperience();
+const current = roles[0];
+const paragraphs = site.bio.split('\n\n');
+---
+
+<Base title="About" description={site.seo.description}>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">About</p>
+      <h1>{site.name}</h1>
+      <p class="lede">{site.tagline}</p>
+    </div>
+
+    <section class="section">
+      <dl class="spec-list">
+        <dt>Role</dt>
+        <dd>{site.title}</dd>
+        <dt>Experience</dt>
+        <dd>~3 years in embedded software and Layer 2 networking</dd>
+        {
+          current && (
+            <>
+              <dt>Most recent</dt>
+              <dd>
+                {current.data.position} at {current.data.company}
+              </dd>
+            </>
+          )
+        }
+        <dt>Location</dt>
+        <dd>{site.location}</dd>
+        <dt>Email</dt>
+        <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+      </dl>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Summary</h2>
+      </div>
+      <div class="prose">
+        {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Engineering interests</h2>
+      </div>
+      <ul class="bullets prose-width">
+        {site.interests.map((interest) => <li>{interest}</li>)}
+      </ul>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="section__head">
+        <h2>Technical skills</h2>
+      </div>
+      <div>
+        {
+          skills.groups.map((group) => (
+            <div class="skill-group">
+              <span class="eyebrow">{group.category}</span>
+              <p class="skill-group__items">
+                {group.items.map((item, index) => (
+                  <>
+                    {index > 0 && <span class="skill-group__sep">·</span>}
+                    {item}
+                  </>
+                ))}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      education.length > 0 && (
+        <section class="section" id="education">
+          <div class="section__head">
+            <h2>Education</h2>
+          </div>
+          <div class="timeline">
+            {education.map((entry) => (
+              <article class="timeline__item">
+                <span class="mono muted">
+                  {formatRange(entry.data.started, entry.data.ended)}
+                </span>
+                <h3>
+                  {entry.data.degree}
+                  {entry.data.field && ` in ${entry.data.field}`}
+                </h3>
+                <p class="muted">
+                  {entry.data.institution}
+                  {entry.data.location && ` · ${entry.data.location}`}
+                  {entry.data.grade &&
+                    ` · CGPA ${entry.data.grade}/${entry.data.gradeScale}`}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Coding profiles</h2>
+      </div>
+      <dl class="spec-list">
+        <dt>Codeforces</dt>
+        <dd>
+          <a href={site.social.codeforces} rel="me noopener">Yamin1999</a>
+          <span class="muted"> · {site.social.codeforcesNote}</span>
+        </dd>
+        <dt>LeetCode</dt>
+        <dd>
+          <a href={site.social.leetcode} rel="me noopener">Yamin1999</a>
+          <span class="muted"> · {site.social.leetcodeNote}</span>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="section">
+      <div class="btn-row">
+        <a class="btn btn--primary" href={site.resume} download
+          >{site.resumeLabel}</a
+        >
+        <a class="btn" href="/projects">View projects</a>
+      </div>
+    </section>
+  </div>
+</Base>

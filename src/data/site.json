@@ -1,0 +1,41 @@
+{
+  "name": "Yamin Haque",
+  "title": "Embedded Software Engineer",
+  "tagline": "Embedded C · Embedded Linux · Layer 2 networking · system debugging",
+  "location": "Mirpur, Dhaka 1216, Bangladesh",
+  "email": "yaminhaque1999@gmail.com",
+  "photo": "",
+  "heroIntro": "I build and debug C for ARM-based carrier Ethernet switches running embedded Linux and VxWorks — Layer 2 protocols, standards-compliant implementations, and the kernel tracing it takes to make them converge reliably.",
+  "currentFocus": "Around three years of C and Embedded C on carrier Ethernet switching, working command-line first with GCC, GDB and ftrace. Currently open to embedded software and systems roles.",
+  "bio": "Software Engineer (R&D) with around three years developing and debugging C / Embedded C software for ARM-based carrier Ethernet switches running embedded Linux. Experienced in Layer 2 networking, Carrier Ethernet protocols, routing and switching, network security, and standards-based protocol implementation.\n\nStrong expertise in low-level C programming — pointers, bitwise operations, type casting, structure packing, byte-order handling and memory management. Skilled in HAL/driver integration, event-driven hardware notification handling, TCP/UDP communication, performance analysis and embedded debugging.\n\nComfortable with command-line, no-IDE development and debugging workflows, with a solid foundation in microcontrollers and RTOS. Familiar with AI and deep learning technologies, and experienced in collaborating with overseas engineering teams and clients using professional working English.",
+  "interests": [
+    "Layer 2 and Carrier Ethernet protocol implementation",
+    "Embedded Linux internals and kernel tracing",
+    "Low-level performance analysis and debugging",
+    "RTOS and microcontroller firmware"
+  ],
+  "resume": "/resume/Yamin_Haque_Resume.pdf",
+  "resumeLabel": "Download CV (PDF)",
+  "social": {
+    "github": "https://github.com/",
+    "linkedin": "https://www.linkedin.com/",
+    "codeforces": "https://codeforces.com/profile/Yamin1999",
+    "codeforcesNote": "Solved 100+ problems",
+    "leetcode": "https://leetcode.com/u/Yamin1999/",
+    "leetcodeNote": "Solved 70+ problems"
+  },
+  "contact": {
+    "formEndpoint": "",
+    "note": "Paste a Formspree endpoint (https://formspree.io/f/xxxxxxxx) here to switch on the contact form. Until then the page shows your email address instead of a form that silently fails."
+  },
+  "seo": {
+    "title": "Yamin Haque — Embedded Software Engineer",
+    "description": "Embedded software engineer working in C on ARM-based carrier Ethernet switches — Layer 2 protocols, embedded Linux, VxWorks, and low-level debugging.",
+    "ogImage": ""
+  },
+  "sections": {
+    "showBlog": true,
+    "showExperience": true,
+    "showEducation": true
+  }
+}

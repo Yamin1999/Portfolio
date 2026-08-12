@@ -1,0 +1,376 @@
+# Sveltia CMS configuration
+#
+# Every field here maps to a field in src/content.config.ts. If the two drift
+# apart the build fails loudly instead of publishing a broken page — that is the
+# intended behaviour, so change both together.
+#
+# Sign in with "Sign In with Token" on the login screen and paste a GitHub
+# personal access token. No OAuth app or auth worker is needed for a single user.
+
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/portfolio # <-- set this before first use
+  branch: main
+  commit_messages:
+    create: 'content: create {{collection}} "{{slug}}"'
+    update: 'content: update {{collection}} "{{slug}}"'
+    delete: 'content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'content: upload {{path}}'
+    deleteMedia: 'content: delete {{path}}'
+
+media_folder: public/uploads
+public_folder: /uploads
+
+publish_mode: simple
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  # ---------------------------------------------------------------- projects
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    create: true
+    slug: '{{title}}'
+    identifier_field: title
+    summary: '{{title}} — {{category}}'
+    sortable_fields: [order, publishedAt, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - {
+          name: summary,
+          label: Summary,
+          widget: text,
+          hint: One or two sentences. Shown on the project card and used as the meta description.,
+        }
+      - name: category
+        label: Category
+        widget: select
+        options:
+          - Embedded Systems
+          - Networking & Protocols
+          - Systems Programming
+          - Machine Learning
+          - Web
+          - Tools
+      - name: context
+        label: Context
+        widget: select
+        options: [professional, academic, personal, oss]
+        default: personal
+      - {
+          name: organization,
+          label: Organisation,
+          widget: string,
+          required: false,
+        }
+      - { name: role, label: Your role, widget: string, required: false }
+      - {
+          name: started,
+          label: Started,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+        }
+      - {
+          name: ended,
+          label: Ended,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+          required: false,
+        }
+      - { name: ongoing, label: Still ongoing, widget: boolean, default: false }
+      - {
+          name: tech,
+          label: Technologies,
+          widget: list,
+          default: [],
+          hint: 'Shown as chips on the card. Example: C, Embedded Linux, ARM',
+        }
+      - {
+          name: standards,
+          label: Standards implemented,
+          widget: list,
+          default: [],
+          required: false,
+          hint: 'Example: ITU-T G.8032, RFC 1350, IEEE 802.1Q',
+        }
+      - {
+          name: cover,
+          label: Cover image,
+          widget: image,
+          required: false,
+          allow_multiple: false,
+        }
+      - { name: repo, label: Source URL, widget: string, required: false }
+      - { name: demo, label: Demo URL, widget: string, required: false }
+      - { name: docs, label: Docs URL, widget: string, required: false }
+      - { name: video, label: Video URL, widget: string, required: false }
+      - {
+          name: confidentiality,
+          label: Confidentiality note,
+          widget: text,
+          required: false,
+          hint: For employer work. Renders as one italic line. Keep product internals and source out of the write-up.,
+        }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - {
+          name: order,
+          label: Display order,
+          widget: number,
+          value_type: int,
+          default: 0,
+        }
+      - {
+          name: published,
+          label: Published,
+          widget: boolean,
+          default: false,
+          hint: Off keeps it a draft — no page is generated and it is invisible to visitors.,
+        }
+      - {
+          name: publishedAt,
+          label: Publish date,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+        }
+      - name: body
+        label: Case study
+        widget: markdown
+        hint: 'Suggested headings: Overview, Problem, Approach, Implementation, Debugging, Results, Lessons learned.'
+
+  # ------------------------------------------------------------------- posts
+  - name: posts
+    label: Engineering notes
+    label_singular: Note
+    folder: src/content/posts
+    create: true
+    slug: '{{title}}'
+    identifier_field: title
+    sortable_fields: [publishedAt, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: excerpt, label: Excerpt, widget: text }
+      - {
+          name: category,
+          label: Category,
+          widget: string,
+          default: Engineering notes,
+        }
+      - { name: tech, label: Tags, widget: list, default: [] }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: published, label: Published, widget: boolean, default: false }
+      - {
+          name: publishedAt,
+          label: Publish date,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+        }
+      - { name: body, label: Body, widget: markdown }
+
+  # -------------------------------------------------------------- experience
+  - name: experience
+    label: Experience
+    label_singular: Role
+    folder: src/content/experience
+    create: true
+    slug: '{{company}}'
+    identifier_field: position
+    summary: '{{position}} — {{company}}'
+    fields:
+      - { name: company, label: Company, widget: string }
+      - {
+          name: companyUrl,
+          label: Company URL,
+          widget: string,
+          required: false,
+        }
+      - { name: position, label: Position, widget: string }
+      - name: employmentType
+        label: Employment type
+        widget: select
+        options: [Full-time, Part-time, Contract, Internship, Freelance]
+        default: Full-time
+      - { name: location, label: Location, widget: string, required: false }
+      - {
+          name: started,
+          label: Started,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+        }
+      - {
+          name: ended,
+          label: Ended,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+          required: false,
+        }
+      - { name: current, label: Current role, widget: boolean, default: false }
+      - { name: summary, label: Summary, widget: text, required: false }
+      - {
+          name: responsibilities,
+          label: Responsibilities,
+          widget: list,
+          default: [],
+        }
+      - { name: tech, label: Technologies, widget: list, default: [] }
+      - {
+          name: order,
+          label: Display order,
+          widget: number,
+          value_type: int,
+          default: 0,
+        }
+
+  # --------------------------------------------------------------- education
+  - name: education
+    label: Education
+    label_singular: Qualification
+    folder: src/content/education
+    create: true
+    slug: '{{institution}}'
+    identifier_field: degree
+    fields:
+      - { name: institution, label: Institution, widget: string }
+      - {
+          name: institutionUrl,
+          label: Institution URL,
+          widget: string,
+          required: false,
+        }
+      - { name: degree, label: Degree, widget: string }
+      - { name: field, label: Field of study, widget: string, required: false }
+      - { name: location, label: Location, widget: string, required: false }
+      - {
+          name: started,
+          label: Started,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+        }
+      - {
+          name: ended,
+          label: Ended,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+          required: false,
+        }
+      - { name: grade, label: Grade, widget: string, required: false }
+      - {
+          name: gradeScale,
+          label: Grade scale,
+          widget: string,
+          required: false,
+        }
+      - {
+          name: order,
+          label: Display order,
+          widget: number,
+          value_type: int,
+          default: 0,
+        }
+      - { name: body, label: Notes, widget: markdown, required: false }
+
+  # ---------------------------------------------------------------- settings
+  - name: settings
+    label: Site settings
+    files:
+      - name: site
+        label: Profile & site
+        file: src/data/site.json
+        fields:
+          - { name: name, label: Name, widget: string }
+          - { name: title, label: Professional title, widget: string }
+          - { name: tagline, label: Tagline, widget: string }
+          - { name: location, label: Location, widget: string }
+          - { name: email, label: Email, widget: string }
+          - {
+              name: photo,
+              label: Profile photo,
+              widget: image,
+              required: false,
+            }
+          - { name: heroIntro, label: Hero intro, widget: text }
+          - { name: currentFocus, label: Current focus, widget: text }
+          - { name: bio, label: Bio, widget: text }
+          - { name: interests, label: Engineering interests, widget: list }
+          - { name: resume, label: CV file, widget: file }
+          - { name: resumeLabel, label: CV button label, widget: string }
+          - name: social
+            label: Social links
+            widget: object
+            fields:
+              - { name: github, label: GitHub, widget: string }
+              - { name: linkedin, label: LinkedIn, widget: string }
+              - { name: codeforces, label: Codeforces, widget: string }
+              - {
+                  name: codeforcesNote,
+                  label: Codeforces note,
+                  widget: string,
+                }
+              - { name: leetcode, label: LeetCode, widget: string }
+              - { name: leetcodeNote, label: LeetCode note, widget: string }
+          - name: contact
+            label: Contact form
+            widget: object
+            fields:
+              - {
+                  name: formEndpoint,
+                  label: Form endpoint,
+                  widget: string,
+                  required: false,
+                  hint: A Formspree URL switches the contact form on. Empty shows your email address instead.,
+                }
+              - { name: note, label: Note to self, widget: text, required: false }
+          - name: seo
+            label: SEO
+            widget: object
+            fields:
+              - { name: title, label: Default page title, widget: string }
+              - { name: description, label: Meta description, widget: text }
+              - {
+                  name: ogImage,
+                  label: Social share image,
+                  widget: image,
+                  required: false,
+                }
+          - name: sections
+            label: Sections
+            widget: object
+            fields:
+              - { name: showBlog, label: Show notes, widget: boolean }
+              - {
+                  name: showExperience,
+                  label: Show experience,
+                  widget: boolean,
+                }
+              - { name: showEducation, label: Show education, widget: boolean }
+
+      - name: skills
+        label: Skills
+        file: src/data/skills.json
+        fields:
+          - name: groups
+            label: Skill groups
+            widget: list
+            summary: '{{fields.category}}'
+            fields:
+              - { name: category, label: Category, widget: string }
+              - { name: items, label: Skills, widget: list }

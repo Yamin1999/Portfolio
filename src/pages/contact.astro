@@ -1,0 +1,141 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+
+// A static site has no server to post to. When a form endpoint is configured the
+// form renders; until then the page shows contact details rather than a form
+// that would silently swallow messages.
+const endpoint = site.contact.formEndpoint;
+---
+
+<Base
+  title="Contact"
+  description={`Get in touch with ${site.name} — ${site.title}.`}
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">Contact</p>
+      <h1>Get in touch</h1>
+      <p class="lede">
+        Open to embedded software and systems roles. Email is the fastest route
+        and always reaches me.
+      </p>
+    </div>
+
+    <section class="section prose-width">
+      <div class="contact-detail">
+        <span class="eyebrow">Email</span>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="contact-detail">
+        <span class="eyebrow">Location</span>
+        <span>{site.location}</span>
+      </div>
+      <div class="contact-detail">
+        <span class="eyebrow">Elsewhere</span>
+        <span>
+          <a href={site.social.github} rel="me noopener">GitHub</a>
+          <span class="skill-group__sep">·</span>
+          <a href={site.social.linkedin} rel="me noopener">LinkedIn</a>
+          <span class="skill-group__sep">·</span>
+          <a href={site.social.codeforces} rel="me noopener">Codeforces</a>
+          <span class="skill-group__sep">·</span>
+          <a href={site.social.leetcode} rel="me noopener">LeetCode</a>
+        </span>
+      </div>
+    </section>
+
+    {
+      endpoint && (
+        <section class="section prose-width">
+          <div class="section__head">
+            <h2>Send a message</h2>
+          </div>
+          <form class="contact-form" action={endpoint} method="POST">
+            <label>
+              <span class="eyebrow">Name</span>
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+            <label>
+              <span class="eyebrow">Email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <label>
+              <span class="eyebrow">Subject</span>
+              <input type="text" name="subject" />
+            </label>
+            <label>
+              <span class="eyebrow">Message</span>
+              <textarea name="message" rows="6" required />
+            </label>
+            {/* Honeypot: hidden from people, tempting to bots. */}
+            <input
+              type="text"
+              name="_gotcha"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+              class="honeypot"
+            />
+            <div class="btn-row">
+              <button class="btn btn--primary" type="submit">
+                Send message
+              </button>
+            </div>
+          </form>
+        </section>
+      )
+    }
+
+    <section class="section">
+      <div class="btn-row">
+        <a class="btn btn--primary" href={site.resume} download
+          >{site.resumeLabel}</a
+        >
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .contact-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font: inherit;
+    font-size: var(--step-0);
+    color: var(--ink);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 0.55rem 0.7rem;
+    width: 100%;
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+  }
+
+  .contact-form input:focus-visible,
+  .contact-form textarea:focus-visible {
+    border-color: var(--accent);
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+</style>

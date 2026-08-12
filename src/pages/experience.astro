@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import { getExperience, formatRange, formatDuration } from '../lib/content';
+
+const roles = await getExperience();
+---
+
+<Base
+  title="Experience"
+  description={`Professional experience of ${site.name} — ${site.title}.`}
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">Experience</p>
+      <h1>Where I've worked</h1>
+    </div>
+
+    <div class="timeline">
+      {
+        roles.map((role) => (
+          <article class="timeline__item">
+            <span class="mono muted">
+              {formatRange(role.data.started, role.data.ended, role.data.current)}
+              <span class="skill-group__sep">·</span>
+              {formatDuration(role.data.started, role.data.ended)}
+            </span>
+            <div>
+              <h2 style="font-size: var(--step-2)">{role.data.position}</h2>
+              <p class="muted">
+                {role.data.companyUrl ? (
+                  <a href={role.data.companyUrl} rel="noopener">
+                    {role.data.company}
+                  </a>
+                ) : (
+                  role.data.company
+                )}
+                {role.data.location && ` · ${role.data.location}`}
+                <span class="skill-group__sep">·</span>
+                {role.data.employmentType}
+              </p>
+            </div>
+            {role.data.summary && <p class="lede">{role.data.summary}</p>}
+            {role.data.responsibilities.length > 0 && (
+              <ul class="bullets prose-width">
+                {role.data.responsibilities.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+            {role.data.tech.length > 0 && (
+              <div class="chips">
+                {role.data.tech.map((item) => (
+                  <span class="chip">{item}</span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))
+      }
+    </div>
+
+    <section class="section">
+      <div class="btn-row">
+        <a class="btn btn--primary" href={site.resume} download
+          >{site.resumeLabel}</a
+        >
+        <a class="btn" href="/projects">See the work</a>
+      </div>
+    </section>
+  </div>
+</Base>

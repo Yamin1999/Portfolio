@@ -1,0 +1,102 @@
+---
+import site from '../data/site.json';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Set on article pages so Open Graph reports the right type. */
+  ogType?: 'website' | 'article';
+  /** Extra JSON-LD to embed, already shaped as a schema.org object. */
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = site.seo.description,
+  ogType = 'website',
+  jsonLd,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${site.name}` : site.seo.title;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = site.seo.ogImage
+  ? new URL(site.seo.ogImage, Astro.site).href
+  : undefined;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta
+      name="twitter:card"
+      content={ogImage ? 'summary_large_image' : 'summary'}
+    />
+
+    <meta name="theme-color" content="#0b6e75" />
+
+    {
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
+
+    {/* Runs before first paint so a dark-mode visitor never sees a white flash. */}
+    <script is:inline>
+      try {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'dark' || stored === 'light') {
+          document.documentElement.dataset.theme = stored;
+        }
+      } catch (_) {}
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      toggle?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const current =
+          root.dataset.theme ??
+          (window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch (_) {}
+        toggle.setAttribute(
+          'aria-label',
+          next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+        );
+      });
+    </script>
+  </body>
+</html>

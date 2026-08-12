@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getFeaturedProjects } from '../lib/content';
+
+const projects = await getFeaturedProjects(2);
+---
+
+<Base title="Page not found" description="That page doesn't exist.">
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">404</p>
+      <h1>That page doesn't exist</h1>
+      <p class="lede">
+        The link may be out of date. These are probably what you were looking
+        for.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn--primary" href="/">Home</a>
+      <a class="btn" href="/projects">All projects</a>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, formatDate, readingMinutes } from '../../lib/content';
+
+const posts = await getPosts();
+---
+
+<Base
+  title="Engineering notes"
+  description="Notes on embedded Linux, Layer 2 networking, protocol implementation and low-level debugging."
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">Notes</p>
+      <h1>Engineering notes</h1>
+      <p class="lede">
+        Working notes on protocols, embedded Linux and the debugging techniques
+        that actually find things.
+      </p>
+    </div>
+
+    {
+      posts.length === 0 ? (
+        <p class="muted">No notes published yet.</p>
+      ) : (
+        <div class="post-list">
+          {posts.map((post) => (
+            <a class="post-item" href={`/blog/${post.id}`}>
+              <span class="mono muted">
+                {formatDate(post.data.publishedAt)}
+                <span class="skill-group__sep">·</span>
+                {readingMinutes(post.body)} min read
+                <span class="skill-group__sep">·</span>
+                {post.data.category}
+              </span>
+              <h2 class="post-item__title">{post.data.title}</h2>
+              <p class="card__summary">{post.data.excerpt}</p>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Base>

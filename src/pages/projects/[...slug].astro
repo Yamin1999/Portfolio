@@ -1,0 +1,163 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getProjects, formatRange } from '../../lib/content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+};
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const data = project.data;
+
+const all = await getProjects();
+const index = all.findIndex((p) => p.id === project.id);
+const previous = all[index - 1];
+const next = all[index + 1];
+
+const related = all
+  .filter((p) => p.id !== project.id && p.data.category === data.category)
+  .slice(0, 2);
+
+const links = [
+  { href: data.repo, label: 'Source' },
+  { href: data.demo, label: 'Live demo' },
+  { href: data.docs, label: 'Documentation' },
+  { href: data.video, label: 'Video' },
+].filter((link) => link.href);
+
+const contextLabels: Record<string, string> = {
+  professional: 'Professional work',
+  academic: 'Academic',
+  personal: 'Personal project',
+  oss: 'Open source',
+};
+const contextLabel = contextLabels[data.context];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': data.repo ? 'SoftwareSourceCode' : 'CreativeWork',
+  name: data.title,
+  description: data.summary,
+  datePublished: data.publishedAt.toISOString().slice(0, 10),
+  author: { '@type': 'Person', name: 'Yamin Haque' },
+  ...(data.repo ? { codeRepository: data.repo } : {}),
+  keywords: [...data.tech, ...data.standards].join(', '),
+};
+---
+
+<Base
+  title={data.title}
+  description={data.summary}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">{data.category}</p>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.summary}</p>
+    </div>
+
+    <dl class="spec-list">
+      <dt>Context</dt>
+      <dd>
+        {contextLabel}{data.organization && ` · ${data.organization}`}
+      </dd>
+      {
+        data.role && (
+          <>
+            <dt>Role</dt>
+            <dd>{data.role}</dd>
+          </>
+        )
+      }
+      <dt>Period</dt>
+      <dd>{formatRange(data.started, data.ended, data.ongoing)}</dd>
+      {
+        data.tech.length > 0 && (
+          <>
+            <dt>Stack</dt>
+            <dd>
+              <div class="chips">
+                {data.tech.map((item) => (
+                  <span class="chip">{item}</span>
+                ))}
+              </div>
+            </dd>
+          </>
+        )
+      }
+      {
+        data.standards.length > 0 && (
+          <>
+            <dt>Standards</dt>
+            <dd>
+              <div class="chips">
+                {data.standards.map((item) => (
+                  <span class="chip chip--standard">{item}</span>
+                ))}
+              </div>
+            </dd>
+          </>
+        )
+      }
+    </dl>
+
+    {
+      links.length > 0 && (
+        <div class="btn-row">
+          {links.map((link) => (
+            <a class="btn" href={link.href} rel="noopener">
+              {link.label} ↗
+            </a>
+          ))}
+        </div>
+      )
+    }
+
+    {data.confidentiality && <p class="note">{data.confidentiality}</p>}
+
+    <article class="prose">
+      <Content />
+    </article>
+
+    {
+      related.length > 0 && (
+        <section class="section">
+          <div class="section__head">
+            <h2>Related work</h2>
+          </div>
+          <ul class="bullets prose-width">
+            {related.map((item) => (
+              <li>
+                <a href={`/projects/${item.id}`}>{item.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <nav class="pager" aria-label="Project navigation">
+      {
+        previous ? (
+          <a href={`/projects/${previous.id}`}>← {previous.data.title}</a>
+        ) : (
+          <span />
+        )
+      }
+      {next && <a href={`/projects/${next.id}`}>{next.data.title} →</a>}
+    </nav>
+  </div>
+</Base>
