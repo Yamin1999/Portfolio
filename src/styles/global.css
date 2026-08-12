@@ -352,9 +352,9 @@ main {
 }
 
 .theme-toggle {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--ink-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--ink);
   border-radius: var(--radius);
   width: 2.05rem;
   height: 2.05rem;
@@ -376,23 +376,39 @@ main {
   height: 15px;
 }
 
-:root[data-theme='dark'] .theme-toggle .icon-moon,
-:root:not([data-theme='light']) .theme-toggle .icon-moon {
-  display: none;
-}
+/* Icon visibility across all three theme states. The icon shows what clicking
+   will DO: a moon on a light page, a sun on a dark one.
+   Never put `display` on these icons inline in the markup — an inline style
+   beats every rule here and hides both icons at once. */
 
-:root[data-theme='dark'] .theme-toggle .icon-sun,
-:root:not([data-theme='light']) .theme-toggle .icon-sun {
+/* 1. Default and explicit light: show the moon. */
+.theme-toggle .icon-moon {
   display: block;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme='dark']) .theme-toggle .icon-moon {
-    display: block;
-  }
-  :root:not([data-theme='dark']) .theme-toggle .icon-sun {
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+/* 2. System dark, with no explicit choice stamped on the root. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .theme-toggle .icon-moon {
     display: none;
   }
+
+  :root:not([data-theme='light']) .theme-toggle .icon-sun {
+    display: block;
+  }
+}
+
+/* 3. Explicit choice wins in both directions. Declared after the media query
+      so it beats it at equal specificity. */
+:root[data-theme='dark'] .theme-toggle .icon-moon {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle .icon-sun {
+  display: block;
 }
 
 :root[data-theme='light'] .theme-toggle .icon-moon {

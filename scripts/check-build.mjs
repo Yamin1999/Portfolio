@@ -165,6 +165,18 @@ oversized.length === 0
       ),
     );
 
+/* 5b — theme icons must not carry inline display styles --------------------- */
+
+// An inline style beats every stylesheet rule, so a `style="display:none"` on
+// one of these hides it in *both* themes and the toggle renders as an empty box.
+const inlineIconStyle = htmlFiles.some((f) => {
+  const html = readFileSync(f, 'utf8');
+  return /<svg[^>]*class="icon-(sun|moon)"[^>]*style=/.test(html);
+});
+inlineIconStyle
+  ? fail('a theme icon has an inline style — it will be hidden in both themes')
+  : pass('theme icons have no inline styles (CSS controls visibility)');
+
 /* 6 — CMS config must not use Decap-only options ---------------------------- */
 
 // Sveltia rejects the whole config on any of these and shows an error screen
