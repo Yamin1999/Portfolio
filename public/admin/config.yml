@@ -303,6 +303,13 @@ collections:
               widget: image,
               required: false,
             }
+          - {
+              name: availability,
+              label: Availability badge,
+              widget: string,
+              required: false,
+              hint: Shown as a pill at the top of the hero. Leave empty to hide it.,
+            }
           - { name: heroIntro, label: Hero intro, widget: text }
           - { name: currentFocus, label: Current focus, widget: text }
           - { name: bio, label: Bio, widget: text }

@@ -1,28 +1,55 @@
 ---
 import site from '../data/site.json';
+import { url } from '../lib/url';
 
-const links = [
+const profiles = [
   { href: site.social.github, label: 'GitHub' },
   { href: site.social.linkedin, label: 'LinkedIn' },
   { href: site.social.codeforces, label: 'Codeforces' },
   { href: site.social.leetcode, label: 'LeetCode' },
-  { href: `mailto:${site.email}`, label: 'Email' },
 ].filter((link) => link.href);
+
+const pages = [
+  { href: '/about', label: 'About', show: true },
+  { href: '/experience', label: 'Experience', show: site.sections.showExperience },
+  { href: '/projects', label: 'Projects', show: true },
+  { href: '/blog', label: 'Notes', show: site.sections.showBlog },
+  { href: '/contact', label: 'Contact', show: true },
+].filter((link) => link.show);
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container site-footer__inner">
-    <p>© {year} {site.name} · {site.location}</p>
-    <nav class="footer-links" aria-label="Elsewhere">
-      {
-        links.map((link) => (
-          <a href={link.href} rel="me noopener">
-            {link.label}
-          </a>
-        ))
-      }
-    </nav>
+  <div class="container">
+    <div class="site-footer__inner">
+      <div class="footer-col">
+        <p class="eyebrow">{site.name}</p>
+        <p>{site.tagline}</p>
+        <a class="btn" href={url(site.resume)} download>{site.resumeLabel}</a>
+      </div>
+
+      <nav class="footer-col" aria-label="Pages">
+        <p class="eyebrow">Pages</p>
+        {pages.map((link) => <a href={url(link.href)}>{link.label}</a>)}
+      </nav>
+
+      <nav class="footer-col" aria-label="Elsewhere">
+        <p class="eyebrow">Elsewhere</p>
+        {
+          profiles.map((link) => (
+            <a href={link.href} rel="me noopener">
+              {link.label}
+            </a>
+          ))
+        }
+        <a href={`mailto:${site.email}`}>Email</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {year} {site.name} · {site.location}</span>
+      <span class="mono">Built with Astro · content in git</span>
+    </div>
   </div>
 </footer>

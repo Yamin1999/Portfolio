@@ -13,10 +13,24 @@ const paragraphs = site.bio.split('\n\n');
 
 <Base title="About" description={site.seo.description}>
   <div class="container sections">
-    <div class="page-head">
-      <p class="eyebrow">About</p>
-      <h1>{site.name}</h1>
-      <p class="lede">{site.tagline}</p>
+    <div class="page-head about-head">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>{site.name}</h1>
+        <p class="lede">{site.tagline}</p>
+      </div>
+      {
+        site.photo && (
+          <img
+            class="about-photo"
+            src={url(site.photo)}
+            width="640"
+            height="640"
+            alt={`${site.name}, ${site.title}`}
+            decoding="async"
+          />
+        )
+      }
     </div>
 
     <section class="section">
@@ -64,23 +78,25 @@ const paragraphs = site.bio.split('\n\n');
       <div class="section__head">
         <h2>Technical skills</h2>
       </div>
-      <div>
+      <div class="skill-grid">
         {
           skills.groups.map((group) => (
-            <div class="skill-group">
-              <span class="eyebrow">{group.category}</span>
-              <p class="skill-group__items">
-                {group.items.map((item, index) => (
-                  <>
-                    {index > 0 && <span class="skill-group__sep">·</span>}
-                    {item}
-                  </>
+            <div class="skill-card">
+              <div class="skill-card__head">
+                <span class="eyebrow">{group.category}</span>
+              </div>
+              <div class="chips">
+                {group.items.map((item) => (
+                  <span class="chip">{item}</span>
                 ))}
-              </p>
+              </div>
             </div>
           ))
         }
       </div>
+      <p class="mono muted">
+        Listed, not rated. The case studies are the evidence.
+      </p>
     </section>
 
     {

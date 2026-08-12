@@ -1,15 +1,29 @@
 ---
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import HeroRing from '../components/HeroRing.astro';
 import site from '../data/site.json';
 import skills from '../data/skills.json';
-import { getFeaturedProjects, getPosts, formatDate } from '../lib/content';
+import { getFeaturedProjects, getProjects, getPosts, formatDate } from '../lib/content';
 import { url } from '../lib/url';
 
-const projects = await getFeaturedProjects(3);
+const featured = await getFeaturedProjects(3);
+const allProjects = await getProjects();
 const posts = site.sections.showBlog ? (await getPosts()).slice(0, 2) : [];
 
-// Featured skill groups only — the full list lives on /about.
+// Counted from the content rather than hard-coded, so the numbers can't drift
+// out of date as projects are added.
+const standardsCount = new Set(
+  allProjects.flatMap((project) => project.data.standards),
+).size;
+
+const stats = [
+  { value: '3 yr', label: 'Embedded C in production' },
+  { value: String(allProjects.length), label: 'Case studies' },
+  { value: String(standardsCount), label: 'Standards implemented' },
+  { value: '170+', label: 'CP problems solved' },
+];
+
 const skillDigest = skills.groups.filter((group) =>
   ['Programming', 'Systems & RTOS', 'Networking', 'Debugging & Tools'].includes(
     group.category,
@@ -31,6 +45,7 @@ const jsonLd = {
   jobTitle: site.title,
   email: `mailto:${site.email}`,
   url: Astro.site?.href,
+  image: site.photo ? new URL(url(site.photo), Astro.site).href : undefined,
   address: { '@type': 'PostalAddress', addressLocality: site.location },
   alumniOf: {
     '@type': 'CollegeOrUniversity',
@@ -50,26 +65,77 @@ const jsonLd = {
 ---
 
 <Base jsonLd={jsonLd}>
-  <div class="container sections">
-    <section class="hero">
-      <p class="hero__title">{site.title}</p>
-      <h1 class="hero__name">{site.name}</h1>
-      <p class="hero__intro">{site.heroIntro}</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href={url('/projects')}>View projects</a>
-        <a class="btn" href={url(site.resume)} download>{site.resumeLabel}</a>
-        <a class="btn" href={site.social.github} rel="me noopener">GitHub</a>
-        <a class="btn" href={site.social.linkedin} rel="me noopener">LinkedIn</a>
-      </div>
-    </section>
+  <section class="hero-band">
+    <div class="container">
+      <div class="hero">
+        <div class="hero__text">
+          {
+            site.availability && (
+              <p class="badge">
+                <span class="badge__dot" />
+                {site.availability}
+              </p>
+            )
+          }
+          <p class="hero__title">{site.title}</p>
+          <h1 class="hero__name">{site.name}</h1>
+          <p class="hero__intro">{site.heroIntro}</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href={url('/projects')}>View projects</a>
+            <a class="btn" href={url(site.resume)} download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              {site.resumeLabel}
+            </a>
+            <a class="btn" href={site.social.github} rel="me noopener">GitHub</a>
+            <a class="btn" href={site.social.linkedin} rel="me noopener">
+              LinkedIn
+            </a>
+          </div>
+        </div>
 
+        {
+          site.photo && (
+            <figure class="hero__figure">
+              <HeroRing />
+              <img
+                class="hero__photo"
+                src={url(site.photo)}
+                width="640"
+                height="640"
+                alt={`${site.name}, ${site.title}`}
+                fetchpriority="high"
+                decoding="async"
+              />
+            </figure>
+          )
+        }
+      </div>
+
+      <div class="stats">
+        {
+          stats.map((stat) => (
+            <div class="stat">
+              <span class="stat__value">{stat.value}</span>
+              <span class="stat__label">{stat.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="container sections">
     <section class="section">
       <div class="section__head">
         <h2>Selected projects</h2>
         <a href={url('/projects')}>All projects →</a>
       </div>
       <div class="card-grid">
-        {projects.map((project) => <ProjectCard project={project} />)}
+        {featured.map((project) => <ProjectCard project={project} />)}
       </div>
     </section>
 
@@ -85,19 +151,18 @@ const jsonLd = {
         <h2>Skills</h2>
         <a href={url('/about#skills')}>Full list →</a>
       </div>
-      <div>
+      <div class="skill-grid">
         {
           skillDigest.map((group) => (
-            <div class="skill-group">
-              <span class="eyebrow">{group.category}</span>
-              <p class="skill-group__items">
-                {group.items.map((item, index) => (
-                  <>
-                    {index > 0 && <span class="skill-group__sep">·</span>}
-                    {item}
-                  </>
+            <div class="skill-card">
+              <div class="skill-card__head">
+                <span class="eyebrow">{group.category}</span>
+              </div>
+              <div class="chips">
+                {group.items.map((item) => (
+                  <span class="chip">{item}</span>
                 ))}
-              </p>
+              </div>
             </div>
           ))
         }

@@ -22,7 +22,10 @@ const links = [
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="brand" href={url('/')}>{site.name}</a>
+    <a class="brand" href={url('/')}>
+      <span class="brand__led" aria-hidden="true"></span>
+      {site.name}
+    </a>
     <nav class="site-nav" aria-label="Main">
       {
         links.map((link) => (
