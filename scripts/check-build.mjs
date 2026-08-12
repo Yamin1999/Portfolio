@@ -165,7 +165,38 @@ oversized.length === 0
       ),
     );
 
-/* 5 — the CV must actually be downloadable --------------------------------- */
+/* 6 — CMS config must not use Decap-only options ---------------------------- */
+
+// Sveltia rejects the whole config on any of these and shows an error screen
+// instead of the admin panel — a failure you only see by opening /admin.
+const cmsConfigPath = join(DIST, 'admin', 'config.yml');
+if (!existsSync(cmsConfigPath)) {
+  fail('CMS config.yml missing from the build');
+} else {
+  const cms = readFileSync(cmsConfigPath, 'utf8');
+  const banned = [
+    ['allow_multiple', 'use `multiple` instead'],
+    ['value_type', 'deprecated on the number widget'],
+    ['publish_mode', 'editorial workflow is not implemented'],
+    ['use_graphql', 'no longer relevant'],
+    ['options_length', 'no longer relevant'],
+    ['sortableFields', 'use snake_case `sortable_fields`'],
+    ['dateFormat', 'use snake_case `date_format`'],
+    ['timeFormat', 'use snake_case `time_format`'],
+    ['pickerUtc', 'use snake_case `picker_utc`'],
+    ['editorComponents', 'use snake_case `editor_components`'],
+  ];
+  const hits = banned.filter(([opt]) => new RegExp(`(^|\\s)${opt}\\s*:`, 'm').test(cms));
+  hits.length === 0
+    ? pass('CMS config uses no Decap-only options')
+    : hits.forEach(([opt, why]) => fail(`CMS config uses "${opt}" — ${why}`));
+
+  /^\s*repo:\s*[\w.-]+\/[\w.-]+\s*$/m.test(cms)
+    ? pass('CMS backend repo is in owner/repo form')
+    : fail('CMS backend repo must be "owner/repo", not a URL');
+}
+
+/* 7 — the CV must actually be downloadable --------------------------------- */
 
 const resumeDir = join(DIST, 'resume');
 existsSync(resumeDir) && readdirSync(resumeDir).some((f) => f.endsWith('.pdf'))
