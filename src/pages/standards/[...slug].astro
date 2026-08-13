@@ -2,8 +2,9 @@
 import type { GetStaticPaths } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import ReportViewer from '../../components/ReportViewer.astro';
 import { getStandards, getProjects } from '../../lib/content';
-import { url, asset } from '../../lib/url';
+import { url } from '../../lib/url';
 
 interface Props {
   standard: CollectionEntry<'standards'>;
@@ -73,19 +74,24 @@ const jsonLd = {
     </dl>
 
     {
-      (data.officialUrl || data.document) && (
+      data.officialUrl && (
         <div class="btn-row">
-          {data.officialUrl && (
-            <a class="btn" href={data.officialUrl} rel="noopener">
-              Official specification &#8599;
-            </a>
-          )}
-          {data.document && (
-            <a class="btn btn--primary" href={asset(data.document)} download>
-              {data.documentLabel || 'Download my notes (PDF)'}
-            </a>
-          )}
+          <a class="btn" href={data.officialUrl} rel="noopener">
+            Official specification &#8599;
+          </a>
         </div>
+      )
+    }
+
+    {
+      data.document && (
+        <ReportViewer
+          document={data.document}
+          label={data.documentLabel}
+          pages={data.documentPages}
+          thumb={data.documentThumb}
+          title={data.title}
+        />
       )
     }
 

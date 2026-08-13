@@ -1,0 +1,158 @@
+---
+import { asset } from '../lib/url';
+
+interface Props {
+  document: string;
+  label?: string;
+  pages?: number;
+  thumb?: string;
+  title: string;
+}
+
+const { document: file, label, pages, thumb, title } = Astro.props;
+const href = asset(file);
+---
+
+<section class="report">
+  <div class="report__head">
+    {
+      thumb && (
+        <img
+          class="report__thumb"
+          src={asset(thumb)}
+          alt={`First page of ${title}`}
+          width="900"
+          height="1165"
+          loading="lazy"
+          decoding="async"
+        />
+      )
+    }
+    <div class="report__meta">
+      <p class="eyebrow">Learning report</p>
+      <h2 class="report__title">{label || title}</h2>
+      <p class="muted">
+        Written by me while studying this specification.
+        {pages && ` ${pages} pages.`}
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={href} download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download PDF
+        </a>
+        <button class="btn report__toggle" type="button" data-pdf={href}>
+          Read in page
+        </button>
+        <a class="btn" href={href} target="_blank" rel="noopener">
+          Open in new tab
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {/* The viewer is injected on click. Embedding it up front would pull a
+      multi-megabyte PDF on every page load. */}
+  <div class="report__viewer" hidden></div>
+</section>
+
+<style>
+  .report {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+  }
+
+  .report__head {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 38rem) {
+    .report__head {
+      grid-template-columns: 1fr;
+    }
+    .report__thumb {
+      max-width: 8rem;
+    }
+  }
+
+  .report__thumb {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    background: #fff;
+  }
+
+  .report__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .report__title {
+    font-size: var(--step-2);
+    line-height: 1.25;
+  }
+
+  button.btn {
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .report__viewer object,
+  .report__viewer iframe {
+    width: 100%;
+    height: min(80vh, 44rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .report__fallback {
+    padding: 1rem;
+    font-size: var(--step--1);
+  }
+</style>
+
+<script>
+  document
+    .querySelectorAll<HTMLButtonElement>('.report__toggle')
+    .forEach((button) => {
+      button.addEventListener('click', () => {
+        const report = button.closest('.report');
+        const viewer = report?.querySelector<HTMLElement>('.report__viewer');
+        if (!viewer) return;
+
+        if (!viewer.hidden) {
+          viewer.hidden = true;
+          viewer.innerHTML = '';
+          button.textContent = 'Read in page';
+          return;
+        }
+
+        const src = button.dataset.pdf ?? '';
+        viewer.innerHTML = `
+          <object data="${src}#view=FitH" type="application/pdf">
+            <p class="report__fallback">
+              Your browser will not display PDFs inline.
+              <a href="${src}" target="_blank" rel="noopener">Open the report in a new tab</a>.
+            </p>
+          </object>`;
+        viewer.hidden = false;
+        button.textContent = 'Hide preview';
+      });
+    });
+</script>

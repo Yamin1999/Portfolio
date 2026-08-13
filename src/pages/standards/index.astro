@@ -1,11 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getStandards, getStandardsByBody } from '../../lib/content';
-import { url } from '../../lib/url';
+import { url, asset } from '../../lib/url';
 
 const all = await getStandards();
 const groups = await getStandardsByBody();
 const implementedCount = all.filter((entry) => entry.data.implemented).length;
+const reports = all.filter((entry) => entry.data.document);
 ---
 
 <Base
@@ -32,6 +33,10 @@ const implementedCount = all.filter((entry) => entry.data.implemented).length;
       <div class="stat">
         <span class="stat__value">{implementedCount}</span>
         <span class="stat__label">Implemented in production</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value">{reports.length}</span>
+        <span class="stat__label">Learning reports</span>
       </div>
       <div class="stat">
         <span class="stat__value">{groups.length}</span>
@@ -69,6 +74,47 @@ const implementedCount = all.filter((entry) => entry.data.implemented).length;
           </div>
         </section>
       ))
+    }
+
+    {
+      reports.length > 0 && (
+        <section class="section">
+          <div class="section__head">
+            <h2>Learning reports</h2>
+          </div>
+          <p class="lede">
+            Formal write ups I produced while studying each specification, with
+            state machines, message flows and the cases that are easy to get
+            wrong. Read them in the browser or download the PDF.
+          </p>
+          <div class="report-grid">
+            {reports.map((entry) => (
+              <a class="report-card" href={url(`/standards/${entry.id}`)}>
+                {entry.data.documentThumb && (
+                  <img
+                    class="report-card__thumb"
+                    src={asset(entry.data.documentThumb)}
+                    alt=""
+                    width="900"
+                    height="1165"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div class="report-card__meta">
+                  <span class="chip chip--standard">
+                    {entry.data.designation}
+                  </span>
+                  <span class="report-card__title">{entry.data.title}</span>
+                  <span class="mono muted">
+                    {entry.data.documentPages} pages
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
     }
 
     <p class="note">

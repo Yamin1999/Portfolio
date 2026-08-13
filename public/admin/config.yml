@@ -335,6 +335,26 @@ collections:
           required: false,
         }
       - {
+          name: documentPages,
+          label: Page count,
+          widget: number,
+          required: false,
+        }
+      - {
+          name: documentThumb,
+          label: First page thumbnail,
+          widget: image,
+          required: false,
+        }
+      - {
+          name: coAuthors,
+          label: Co-authors,
+          widget: list,
+          default: [],
+          required: false,
+          hint: Name anyone who wrote part of the document with you. Leave empty if it is solely yours.,
+        }
+      - {
           name: implemented,
           label: Implemented in production,
           widget: boolean,

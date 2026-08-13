@@ -5,6 +5,10 @@ publisher: IETF
 area: File transfer over UDP
 summary: A deliberately minimal file transfer protocol, still the one network devices speak during firmware upgrade and boot, plus the two extensions that make it fast enough to be practical.
 officialUrl: https://www.rfc-editor.org/rfc/rfc1350
+document: /reports/rfc1350-learning-report.pdf
+documentLabel: RFC 1350 learning report (PDF)
+documentPages: 13
+documentThumb: /reports/thumbs/rfc1350-learning-report.webp
 implemented: true
 relatedProjects:
   - tftp-server-module

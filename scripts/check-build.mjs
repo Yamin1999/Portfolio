@@ -197,6 +197,24 @@ dashOffenders.length === 0
       .slice(0, 4)
       .forEach((o) => fail(`long dash found - use a plain hyphen: ${o}`));
 
+/* 5d - attached documents must exist ---------------------------------------- */
+
+// A standards entry can point at a PDF that was never committed. The page still
+// builds, and the download button 404s for the reader.
+const missingDocs = [];
+for (const entry of collect(join(ROOT, 'src', 'content', 'standards'))) {
+  for (const field of ['document', 'documentThumb']) {
+    const value = entry.data[field];
+    if (!value) continue;
+    if (!existsSync(join(DIST, value.replace(/^\//, '')))) {
+      missingDocs.push(`standards/${entry.slug} ${field}: ${value}`);
+    }
+  }
+}
+missingDocs.length === 0
+  ? pass('every attached document and thumbnail exists in the build')
+  : missingDocs.slice(0, 4).forEach((m) => fail(`missing file - ${m}`));
+
 /* 6 - CMS config must not use Decap-only options ---------------------------- */
 
 // Sveltia rejects the whole config on any of these and shows an error screen

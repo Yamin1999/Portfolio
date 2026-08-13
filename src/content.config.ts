@@ -123,6 +123,10 @@ const standards = defineCollection({
     /** A PDF of your own notes. Never the standard itself. */
     document: optionalText,
     documentLabel: optionalText,
+    documentPages: z.number().optional(),
+    documentThumb: optionalText,
+    /** Set when a document was written with colleagues, so credit is visible. */
+    coAuthors: z.array(z.string()).default([]),
     /** True when you have implemented it in production, not just read it. */
     implemented: z.boolean().default(false),
     relatedProjects: z.array(z.string()).default([]),

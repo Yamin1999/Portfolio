@@ -5,6 +5,10 @@ publisher: IEEE
 area: Service OAM
 summary: Gives Ethernet the operational tooling that carriers expect, detecting and isolating faults across a service that crosses networks the operator does not own.
 officialUrl: https://standards.ieee.org/ieee/802.1Q/10323/
+document: /reports/cfm-learning-report.pdf
+documentLabel: CFM learning report (PDF)
+documentPages: 16
+documentThumb: /reports/thumbs/cfm-learning-report.webp
 implemented: true
 relatedProjects:
   - layer-2-protocol-development

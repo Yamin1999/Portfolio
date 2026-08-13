@@ -1257,3 +1257,61 @@ main {
   object-fit: cover;
   max-height: 26rem;
 }
+
+/* ==========================================================================
+   Learning report cards
+   ========================================================================== */
+
+.report-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
+}
+
+.report-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.report-card__thumb {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1.29;
+  object-fit: cover;
+  object-position: top center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.report-card:hover .report-card__thumb {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+.report-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: flex-start;
+}
+
+.report-card__title {
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.report-card:hover .report-card__title {
+  color: var(--accent);
+}
