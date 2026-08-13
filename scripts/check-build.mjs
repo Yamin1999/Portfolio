@@ -77,6 +77,7 @@ const allHtml = htmlFiles.map((f) => readFileSync(f, 'utf8')).join('\n');
 for (const [collection, urlBase] of [
   ['projects', 'projects'],
   ['posts', 'blog'],
+  ['standards', 'standards'],
 ]) {
   for (const entry of collect(join(ROOT, 'src', 'content', collection))) {
     const page = join(DIST, urlBase, entry.slug, 'index.html');

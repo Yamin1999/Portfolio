@@ -284,6 +284,90 @@ collections:
         }
       - { name: body, label: Notes, widget: markdown, required: false }
 
+  # ----------------------------------------------------------------- standards
+  - name: standards
+    label: Standards
+    label_singular: Standard
+    folder: src/content/standards
+    create: true
+    slug: '{{designation}}-{{title}}'
+    identifier_field: title
+    summary: '{{designation}} - {{title}}'
+    sortable_fields: [order, designation, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - {
+          name: designation,
+          label: Designation,
+          widget: string,
+          hint: 'Example: ITU-T G.8032, IEEE 802.1Q, RFC 1350',
+        }
+      - name: publisher
+        label: Published by
+        widget: select
+        options: [ITU-T, IEEE, IETF, Other]
+        default: IEEE
+      - {
+          name: area,
+          label: Area,
+          widget: string,
+          hint: 'Example: Layer 2 protection switching',
+        }
+      - { name: summary, label: Summary, widget: text }
+      - {
+          name: officialUrl,
+          label: Official specification URL,
+          widget: string,
+          required: false,
+          hint: Link to the publisher's own copy. Do not upload the standard itself, it is copyrighted.,
+        }
+      - {
+          name: document,
+          label: Your notes (PDF),
+          widget: file,
+          required: false,
+          hint: Only a document you wrote yourself. Never the standard document.,
+        }
+      - {
+          name: documentLabel,
+          label: Notes button label,
+          widget: string,
+          required: false,
+        }
+      - {
+          name: implemented,
+          label: Implemented in production,
+          widget: boolean,
+          default: false,
+        }
+      - {
+          name: relatedProjects,
+          label: Related project slugs,
+          widget: list,
+          default: [],
+          required: false,
+          hint: 'The filename of the project without .md, for example: tftp-server-module',
+        }
+      - {
+          name: order,
+          label: Display order,
+          widget: number,
+          default: 0,
+        }
+      - { name: published, label: Published, widget: boolean, default: false }
+      - {
+          name: publishedAt,
+          label: Publish date,
+          widget: datetime,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          format: YYYY-MM-DD,
+        }
+      - name: body
+        label: Notes
+        widget: markdown
+        hint: Your own writing about the standard.
+
   # ---------------------------------------------------------------- settings
   - name: settings
     label: Site settings

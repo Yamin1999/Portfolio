@@ -49,6 +49,28 @@ export async function getEducation() {
   return entries.sort((a, b) => a.data.order - b.data.order);
 }
 
+export async function getStandards(): Promise<CollectionEntry<'standards'>[]> {
+  const entries = await getCollection('standards', isLive);
+  return entries.sort((a, b) => {
+    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+    return a.data.designation.localeCompare(b.data.designation);
+  });
+}
+
+/** Grouped by publishing body, in the order the groups should appear. */
+export async function getStandardsByBody() {
+  const entries = await getStandards();
+  const order = ['ITU-T', 'IEEE', 'IETF', 'Other'];
+  const groups = new Map<string, CollectionEntry<'standards'>[]>();
+  for (const entry of entries) {
+    const key = entry.data.publisher;
+    groups.set(key, [...(groups.get(key) ?? []), entry]);
+  }
+  return order
+    .filter((name) => groups.has(name))
+    .map((name) => ({ publisher: name, entries: groups.get(name)! }));
+}
+
 /* -------------------------------------------------------------------------- */
 /* Formatting                                                                  */
 /* -------------------------------------------------------------------------- */

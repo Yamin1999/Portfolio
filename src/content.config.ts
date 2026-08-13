@@ -103,4 +103,39 @@ const education = defineCollection({
   }),
 });
 
-export const collections = { projects, posts, experience, education };
+/**
+ * Standards you have read, implemented or taken notes on.
+ *
+ * The body of each entry is YOUR writing. `officialUrl` points at the
+ * publisher's own copy of the spec; `document` is for a PDF you wrote yourself.
+ * Do not upload the standards documents themselves, they are copyrighted by
+ * IEEE / ITU / IETF and redistributing them is not yours to do.
+ */
+const standards = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/standards' }),
+  schema: z.object({
+    title: z.string(),
+    designation: z.string(),
+    publisher: z.enum(['ITU-T', 'IEEE', 'IETF', 'Other']),
+    area: z.string(),
+    summary: z.string().max(320),
+    officialUrl: optionalUrl,
+    /** A PDF of your own notes. Never the standard itself. */
+    document: optionalText,
+    documentLabel: optionalText,
+    /** True when you have implemented it in production, not just read it. */
+    implemented: z.boolean().default(false),
+    relatedProjects: z.array(z.string()).default([]),
+    order: z.number().default(0),
+    published: z.boolean().default(false),
+    publishedAt: z.date(),
+  }),
+});
+
+export const collections = {
+  projects,
+  posts,
+  experience,
+  education,
+  standards,
+};

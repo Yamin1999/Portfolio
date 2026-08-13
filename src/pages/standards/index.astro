@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getStandards, getStandardsByBody } from '../../lib/content';
+import { url } from '../../lib/url';
+
+const all = await getStandards();
+const groups = await getStandardsByBody();
+const implementedCount = all.filter((entry) => entry.data.implemented).length;
+---
+
+<Base
+  title="Standards"
+  description="Notes on the IEEE, ITU-T and IETF standards behind carrier Ethernet switching, written while implementing them."
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">Standards</p>
+      <h1>Reading the spec</h1>
+      <p class="lede">
+        Carrier Ethernet interoperability is decided by the document, not by the
+        peer. If two vendors disagree about a timer or a state transition, the
+        standard says who is wrong. These are my notes on the specifications
+        behind the work, written while implementing them.
+      </p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat__value">{all.length}</span>
+        <span class="stat__label">Documented</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value">{implementedCount}</span>
+        <span class="stat__label">Implemented in production</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value">{groups.length}</span>
+        <span class="stat__label">Standards bodies</span>
+      </div>
+    </div>
+
+    {
+      groups.map((group) => (
+        <section class="section">
+          <div class="section__head">
+            <h2>{group.publisher}</h2>
+          </div>
+          <div class="card-grid">
+            {group.entries.map((entry) => (
+              <a class="card" href={url(`/standards/${entry.id}`)}>
+                <div class="card__body">
+                  <div class="card__meta">
+                    <span class="chip chip--standard">
+                      {entry.data.designation}
+                    </span>
+                    {entry.data.implemented && (
+                      <span class="mono muted">Implemented</span>
+                    )}
+                  </div>
+                  <h3 class="card__title">{entry.data.title}</h3>
+                  <p class="card__summary">{entry.data.summary}</p>
+                  <span class="eyebrow">{entry.data.area}</span>
+                  <span class="card__more">
+                    Read notes <span>-&gt;</span>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <p class="note">
+      These pages are my own notes and summaries. The standards themselves are
+      copyrighted by their publishers and are not reproduced here; each page
+      links to the publisher's official copy.
+    </p>
+  </div>
+</Base>

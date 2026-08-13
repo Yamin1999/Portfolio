@@ -37,6 +37,7 @@
   "sections": {
     "showBlog": true,
     "showExperience": true,
-    "showEducation": true
+    "showEducation": true,
+    "showStandards": true
   }
 }

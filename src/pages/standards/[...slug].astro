@@ -1,0 +1,139 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getStandards, getProjects } from '../../lib/content';
+import { url, asset } from '../../lib/url';
+
+interface Props {
+  standard: CollectionEntry<'standards'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const standards = await getStandards();
+  return standards.map((standard) => ({
+    params: { slug: standard.id },
+    props: { standard },
+  }));
+};
+
+const { standard } = Astro.props;
+const { Content } = await render(standard);
+const data = standard.data;
+
+const all = await getStandards();
+const index = all.findIndex((entry) => entry.id === standard.id);
+const previous = all[index - 1];
+const next = all[index + 1];
+
+const projects = await getProjects();
+const related = projects.filter((project) =>
+  data.relatedProjects.includes(project.id),
+);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: `${data.designation}: ${data.title}`,
+  description: data.summary,
+  datePublished: data.publishedAt.toISOString().slice(0, 10),
+  author: { '@type': 'Person', name: 'Yamin Haque' },
+  about: data.designation,
+};
+---
+
+<Base
+  title={`${data.designation} notes`}
+  description={data.summary}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <div class="container sections">
+    <div class="page-head">
+      <p class="eyebrow">{data.publisher} standard</p>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.summary}</p>
+    </div>
+
+    <dl class="spec-list">
+      <dt>Designation</dt>
+      <dd>{data.designation}</dd>
+      <dt>Published by</dt>
+      <dd>{data.publisher}</dd>
+      <dt>Area</dt>
+      <dd>{data.area}</dd>
+      <dt>Status</dt>
+      <dd>
+        {
+          data.implemented
+            ? 'Implemented in production'
+            : 'Studied, not yet implemented'
+        }
+      </dd>
+    </dl>
+
+    {
+      (data.officialUrl || data.document) && (
+        <div class="btn-row">
+          {data.officialUrl && (
+            <a class="btn" href={data.officialUrl} rel="noopener">
+              Official specification &#8599;
+            </a>
+          )}
+          {data.document && (
+            <a class="btn btn--primary" href={asset(data.document)} download>
+              {data.documentLabel || 'Download my notes (PDF)'}
+            </a>
+          )}
+        </div>
+      )
+    }
+
+    <article class="prose">
+      <Content />
+    </article>
+
+    {
+      related.length > 0 && (
+        <section class="section">
+          <div class="section__head">
+            <h2>Where this shows up</h2>
+          </div>
+          <ul class="bullets prose-width">
+            {related.map((project) => (
+              <li>
+                <a href={url(`/projects/${project.id}`)}>
+                  {project.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <p class="note">
+      My own notes. The specification itself is copyright {data.publisher} and is not
+      reproduced here.
+    </p>
+
+    <nav class="pager" aria-label="Standard navigation">
+      {
+        previous ? (
+          <a href={url(`/standards/${previous.id}`)}>
+            &#8592; {previous.data.designation}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next && (
+          <a href={url(`/standards/${next.id}`)}>
+            {next.data.designation} &#8594;
+          </a>
+        )
+      }
+    </nav>
+  </div>
+</Base>
