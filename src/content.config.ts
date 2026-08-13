@@ -7,6 +7,17 @@ import { glob } from 'astro/loaders';
  * if they drift, the build fails instead of shipping a broken page.
  */
 
+/**
+ * The CMS writes `''` for optional fields you leave blank, and an empty string
+ * is not a valid URL — so a plain `.url().optional()` fails the build the first
+ * time you save a project without a repo link. Treat blank as absent.
+ */
+const blankToUndefined = (value: unknown) =>
+  typeof value === 'string' && value.trim() === '' ? undefined : value;
+
+const optionalUrl = z.preprocess(blankToUndefined, z.string().url().optional());
+const optionalText = z.preprocess(blankToUndefined, z.string().optional());
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
@@ -21,20 +32,20 @@ const projects = defineCollection({
       'Tools',
     ]),
     context: z.enum(['professional', 'academic', 'personal', 'oss']),
-    organization: z.string().optional(),
-    role: z.string().optional(),
+    organization: optionalText,
+    role: optionalText,
     started: z.date(),
     ended: z.date().optional(),
     ongoing: z.boolean().default(false),
     tech: z.array(z.string()).default([]),
     standards: z.array(z.string()).default([]),
-    cover: z.string().optional(),
-    repo: z.string().url().optional(),
-    demo: z.string().url().optional(),
-    docs: z.string().url().optional(),
-    video: z.string().url().optional(),
+    cover: optionalText,
+    repo: optionalUrl,
+    demo: optionalUrl,
+    docs: optionalUrl,
+    video: optionalUrl,
     // Rendered as a single italic line. See §5 of the build spec.
-    confidentiality: z.string().optional(),
+    confidentiality: optionalText,
     featured: z.boolean().default(false),
     order: z.number().default(0),
     published: z.boolean().default(false),
@@ -49,7 +60,7 @@ const posts = defineCollection({
     excerpt: z.string().max(320),
     category: z.string().default('Engineering notes'),
     tech: z.array(z.string()).default([]),
-    cover: z.string().optional(),
+    cover: optionalText,
     featured: z.boolean().default(false),
     published: z.boolean().default(false),
     publishedAt: z.date(),
@@ -60,16 +71,16 @@ const experience = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/experience' }),
   schema: z.object({
     company: z.string(),
-    companyUrl: z.string().url().optional(),
+    companyUrl: optionalUrl,
     position: z.string(),
     employmentType: z
       .enum(['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'])
       .default('Full-time'),
-    location: z.string().optional(),
+    location: optionalText,
     started: z.date(),
     ended: z.date().optional(),
     current: z.boolean().default(false),
-    summary: z.string().optional(),
+    summary: optionalText,
     responsibilities: z.array(z.string()).default([]),
     tech: z.array(z.string()).default([]),
     order: z.number().default(0),
@@ -80,14 +91,14 @@ const education = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/education' }),
   schema: z.object({
     institution: z.string(),
-    institutionUrl: z.string().url().optional(),
+    institutionUrl: optionalUrl,
     degree: z.string(),
-    field: z.string().optional(),
-    location: z.string().optional(),
+    field: optionalText,
+    location: optionalText,
     started: z.date(),
     ended: z.date().optional(),
-    grade: z.string().optional(),
-    gradeScale: z.string().optional(),
+    grade: optionalText,
+    gradeScale: optionalText,
     order: z.number().default(0),
   }),
 });

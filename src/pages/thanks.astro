@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import { url } from '../lib/url';
+---
+
+<Base title="Message sent" description="Your message has been sent.">
+  <div class="container sections">
+    <div class="page-head prose-width">
+      <p class="eyebrow">Contact</p>
+      <h1>Message sent</h1>
+      <p class="lede">
+        Thanks — it's in my inbox. I'll reply to the address you gave, usually
+        within a day or two.
+      </p>
+      <p class="muted">
+        If it's urgent, email me directly at
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn--primary" href={url('/')}>Back to home</a>
+      <a class="btn" href={url('/projects')}>View projects</a>
+    </div>
+  </div>
+</Base>

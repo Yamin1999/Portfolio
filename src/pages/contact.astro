@@ -3,10 +3,19 @@ import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 import { url } from '../lib/url';
 
-// A static site has no server to post to. When a form endpoint is configured the
-// form renders; until then the page shows contact details rather than a form
-// that would silently swallow messages.
-const endpoint = site.contact.formEndpoint;
+// A static site has no server of its own, so the form posts to a form-relay
+// service that forwards submissions to your inbox.
+//
+// Default: FormSubmit — no account needed, it just emails the address below.
+// The FIRST submission triggers a confirmation email you must click once;
+// after that every message arrives directly.
+//
+// To switch providers (Formspree, Web3Forms, …), put their endpoint in
+// site.json → contact.formEndpoint and it takes over.
+const endpoint =
+  site.contact.formEndpoint || `https://formsubmit.co/${site.email}`;
+
+const thanksUrl = new URL(url('/thanks'), Astro.site).href;
 ---
 
 <Base
@@ -18,96 +27,130 @@ const endpoint = site.contact.formEndpoint;
       <p class="eyebrow">Contact</p>
       <h1>Get in touch</h1>
       <p class="lede">
-        Open to embedded software and systems roles. Email is the fastest route
-        and always reaches me.
+        Open to embedded software and systems roles. Send a message below, or
+        email me directly — both reach the same inbox.
       </p>
     </div>
 
     <section class="section">
-      <div class="contact-grid">
-      <div class="contact-detail">
-        <span class="eyebrow">Email</span>
-        <a href={`mailto:${site.email}`}>{site.email}</a>
-      </div>
-      <div class="contact-detail">
-        <span class="eyebrow">Location</span>
-        <span>{site.location}</span>
-      </div>
-      <div class="contact-detail">
-        <span class="eyebrow">Elsewhere</span>
-        <span>
-          <a href={site.social.github} rel="me noopener">GitHub</a>
-          <span class="skill-group__sep">·</span>
-          <a href={site.social.linkedin} rel="me noopener">LinkedIn</a>
-          <span class="skill-group__sep">·</span>
-          <a href={site.social.codeforces} rel="me noopener">Codeforces</a>
-          <span class="skill-group__sep">·</span>
-          <a href={site.social.leetcode} rel="me noopener">LeetCode</a>
-        </span>
-      </div>
-      </div>
-    </section>
-
-    {
-      endpoint && (
-        <section class="section prose-width">
-          <div class="section__head">
-            <h2>Send a message</h2>
-          </div>
-          <form class="contact-form" action={endpoint} method="POST">
-            <label>
+      <div class="contact-layout">
+        <form class="contact-form" action={endpoint} method="POST">
+          <div class="field-row">
+            <label class="field">
               <span class="eyebrow">Name</span>
               <input type="text" name="name" required autocomplete="name" />
             </label>
-            <label>
+            <label class="field">
               <span class="eyebrow">Email</span>
               <input type="email" name="email" required autocomplete="email" />
             </label>
-            <label>
-              <span class="eyebrow">Subject</span>
-              <input type="text" name="subject" />
-            </label>
-            <label>
-              <span class="eyebrow">Message</span>
-              <textarea name="message" rows="6" required />
-            </label>
-            {/* Honeypot: hidden from people, tempting to bots. */}
+          </div>
+
+          <label class="field">
+            <span class="eyebrow">Subject</span>
             <input
               type="text"
-              name="_gotcha"
-              tabindex="-1"
-              autocomplete="off"
-              aria-hidden="true"
-              class="honeypot"
+              name="_subject"
+              placeholder="What's this about?"
             />
-            <div class="btn-row">
-              <button class="btn btn--primary" type="submit">
-                Send message
-              </button>
-            </div>
-          </form>
-        </section>
-      )
-    }
+          </label>
 
-    <section class="section">
-      <div class="btn-row">
-        <a class="btn btn--primary" href={url(site.resume)} download
-          >{site.resumeLabel}</a
-        >
+          <label class="field">
+            <span class="eyebrow">Message</span>
+            <textarea name="message" rows="7" required></textarea>
+          </label>
+
+          {/* Honeypot: hidden from people, tempting to bots. */}
+          <input
+            type="text"
+            name="_honey"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+            class="honeypot"
+          />
+          {/* Plain-text email rather than FormSubmit's default table markup */}
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value={thanksUrl} />
+
+          <div class="btn-row">
+            <button class="btn btn--primary" type="submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              Send message
+            </button>
+          </div>
+        </form>
+
+        <aside class="contact-aside">
+          <div class="contact-detail">
+            <span class="eyebrow">Email</span>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </div>
+          <div class="contact-detail">
+            <span class="eyebrow">Location</span>
+            <span>{site.location}</span>
+          </div>
+          <div class="contact-detail">
+            <span class="eyebrow">Elsewhere</span>
+            <span class="stack-links">
+              <a href={site.social.github} rel="me noopener">GitHub</a>
+              <a href={site.social.linkedin} rel="me noopener">LinkedIn</a>
+              <a href={site.social.codeforces} rel="me noopener">Codeforces</a>
+              <a href={site.social.leetcode} rel="me noopener">LeetCode</a>
+            </span>
+          </div>
+          <a class="btn btn--primary" href={url(site.resume)} download>
+            {site.resumeLabel}
+          </a>
+        </aside>
       </div>
     </section>
   </div>
 </Base>
 
 <style>
+  .contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 46rem) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
   .contact-form {
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-sm);
+    padding: 1.6rem;
   }
 
-  .contact-form label {
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+
+  @media (max-width: 34rem) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .field {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -118,20 +161,25 @@ const endpoint = site.contact.formEndpoint;
     font: inherit;
     font-size: var(--step-0);
     color: var(--ink);
-    background: var(--surface-raised);
+    background: var(--ground);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
-    padding: 0.55rem 0.7rem;
+    padding: 0.6rem 0.75rem;
     width: 100%;
   }
 
   .contact-form textarea {
     resize: vertical;
+    min-height: 8rem;
   }
 
   .contact-form input:focus-visible,
   .contact-form textarea:focus-visible {
     border-color: var(--accent);
+  }
+
+  .contact-form input::placeholder {
+    color: var(--ink-faint);
   }
 
   .honeypot {
@@ -140,5 +188,22 @@ const endpoint = site.contact.formEndpoint;
     width: 1px;
     height: 1px;
     opacity: 0;
+  }
+
+  .contact-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .stack-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+  }
+
+  button.btn {
+    cursor: pointer;
+    font-family: inherit;
   }
 </style>

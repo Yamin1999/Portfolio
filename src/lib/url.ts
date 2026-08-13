@@ -14,3 +14,12 @@ export function url(path: string): string {
   const suffix = path.startsWith('/') ? path : `/${path}`;
   return `${base}${suffix}`;
 }
+
+/**
+ * For files uploaded through the CMS. Same base handling as url(), plus percent
+ * encoding — uploaded filenames routinely contain spaces ("Screenshot from
+ * 2024-12-13 21-25-31.png") and an unencoded space breaks the src attribute.
+ */
+export function asset(path: string): string {
+  return encodeURI(url(path));
+}

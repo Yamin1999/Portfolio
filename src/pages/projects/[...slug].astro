@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { getProjects, formatRange } from '../../lib/content';
-import { url } from '../../lib/url';
+import { url, asset } from '../../lib/url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -69,6 +69,18 @@ const jsonLd = {
       <h1>{data.title}</h1>
       <p class="lede">{data.summary}</p>
     </div>
+
+    {
+      data.cover && (
+        <img
+          class="cover-banner"
+          src={asset(data.cover)}
+          alt={`${data.title} — cover`}
+          loading="eager"
+          decoding="async"
+        />
+      )
+    }
 
     <dl class="spec-list">
       <dt>Context</dt>

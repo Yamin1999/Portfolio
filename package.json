@@ -1,15 +1,15 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
-  "description": "Yamin Haque — portfolio and engineering notes",
+  "description": "Yamin Haque \u2014 portfolio and engineering notes",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/optimize-uploads.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "verify": "astro build && node scripts/check-build.mjs"
+    "verify": "npm run build && node scripts/check-build.mjs"
   },
   "license": "MIT",
   "dependencies": {

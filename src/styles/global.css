@@ -789,7 +789,6 @@ main {
   gap: 0.7rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.4rem 1.35rem 1.25rem;
   background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
   text-decoration: none;
@@ -820,6 +819,23 @@ main {
 
 .card:hover::before {
   opacity: 1;
+}
+
+/* Cover sits full-bleed at the top of the card; the body carries the padding. */
+.card__cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.4rem 1.35rem 1.25rem;
+  flex: 1;
 }
 
 .card__meta {
@@ -1226,4 +1242,18 @@ main {
     width: 6.5rem;
     order: -1;
   }
+}
+
+/* ==========================================================================
+   Project cover banner (detail page)
+   ========================================================================== */
+
+.cover-banner {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  background: var(--surface);
+  object-fit: cover;
+  max-height: 26rem;
 }

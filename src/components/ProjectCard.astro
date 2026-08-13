@@ -1,32 +1,46 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatRange } from '../lib/content';
-import { url } from '../lib/url';
+import { url, asset } from '../lib/url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 
 const { project } = Astro.props;
-const { title, summary, category, tech, started, ended, ongoing } = project.data;
+const { title, summary, category, tech, started, ended, ongoing, cover } =
+  project.data;
 ---
 
 <a class="card" href={url(`/projects/${project.id}`)}>
-  <div class="card__meta">
-    <span class="eyebrow">{category}</span>
-    <span class="mono muted">{formatRange(started, ended, ongoing)}</span>
-  </div>
-  <h3 class="card__title">{title}</h3>
-  <p class="card__summary">{summary}</p>
   {
-    tech.length > 0 && (
-      <div class="chips">
-        {tech.slice(0, 4).map((item) => (
-          <span class="chip">{item}</span>
-        ))}
-        {tech.length > 4 && <span class="chip">+{tech.length - 4}</span>}
-      </div>
+    cover && (
+      <img
+        class="card__cover"
+        src={asset(cover)}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
     )
   }
-  <span class="card__more">Read case study <span>→</span></span>
+  <div class="card__body">
+    <div class="card__meta">
+      <span class="eyebrow">{category}</span>
+      <span class="mono muted">{formatRange(started, ended, ongoing)}</span>
+    </div>
+    <h3 class="card__title">{title}</h3>
+    <p class="card__summary">{summary}</p>
+    {
+      tech.length > 0 && (
+        <div class="chips">
+          {tech.slice(0, 4).map((item) => (
+            <span class="chip">{item}</span>
+          ))}
+          {tech.length > 4 && <span class="chip">+{tech.length - 4}</span>}
+        </div>
+      )
+    }
+    <span class="card__more">Read case study <span>→</span></span>
+  </div>
 </a>

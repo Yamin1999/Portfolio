@@ -27,7 +27,7 @@
   },
   "contact": {
     "formEndpoint": "",
-    "note": "Paste a Formspree endpoint (https://formspree.io/f/xxxxxxxx) here to switch on the contact form. Until then the page shows your email address instead of a form that silently fails."
+    "note": "Leave empty to use FormSubmit with the email above — no signup, but you must click the confirmation link FormSubmit emails you after the very first message. To use a different provider (Formspree, Web3Forms), paste its endpoint URL here and it takes over."
   },
   "seo": {
     "title": "Yamin Haque — Embedded Software Engineer",
