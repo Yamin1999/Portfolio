@@ -2,7 +2,7 @@
 /**
  * Compresses images uploaded through the CMS.
  *
- * Runs after the build, on dist/ only — the originals in public/uploads stay
+ * Runs after the build, on dist/ only - the originals in public/uploads stay
  * untouched in git, so nothing is lost and re-running is always safe. Files keep
  * their name and extension so every reference in the built HTML still resolves.
  *
@@ -19,7 +19,7 @@ const MAX_WIDTH = 1600;
 const RESIZABLE = new Set(['.png', '.jpg', '.jpeg', '.webp']);
 
 if (!existsSync(DIST_UPLOADS)) {
-  console.log('\nNo dist/uploads — nothing to optimize.\n');
+  console.log('\nNo dist/uploads - nothing to optimize.\n');
   process.exit(0);
 }
 
@@ -63,7 +63,7 @@ for (const name of readdirSync(DIST_UPLOADS)) {
         `  ${name}\n    ${kb(before)} → ${kb(buffer.length)}  (−${Math.round((1 - buffer.length / before) * 100)}%)`,
       );
     } else {
-      console.log(`  ${name}\n    ${kb(before)} — already optimal, left alone`);
+      console.log(`  ${name}\n    ${kb(before)} - already optimal, left alone`);
     }
   } catch (error) {
     console.log(`  ${name}\n    skipped: ${error.message}`);

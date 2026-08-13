@@ -10,6 +10,6 @@ gradeScale: "4.0"
 order: 1
 ---
 
-Thesis: *Deep Convolutional Neural Network for Malaria Parasite Detection* — an
+Thesis: *Deep Convolutional Neural Network for Malaria Parasite Detection* - an
 improved machine learning framework evaluated with five-fold cross-validation on
 27,578 single-cell images.

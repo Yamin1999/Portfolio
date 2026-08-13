@@ -28,7 +28,7 @@ const fail = (msg) => {
   console.log(`  FAIL  ${msg}`);
 };
 
-/** Minimal frontmatter reader — enough for the fields we gate on. */
+/** Minimal frontmatter reader - enough for the fields we gate on. */
 function frontmatter(file) {
   const text = readFileSync(file, 'utf8');
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -64,7 +64,7 @@ function walk(dir, out = []) {
 console.log('\nBuild checks\n');
 
 if (!existsSync(DIST)) {
-  console.error('dist/ not found — run `npm run build` first.\n');
+  console.error('dist/ not found - run `npm run build` first.\n');
   process.exit(1);
 }
 
@@ -72,7 +72,7 @@ const distFiles = walk(DIST);
 const htmlFiles = distFiles.filter((f) => f.endsWith('.html'));
 const allHtml = htmlFiles.map((f) => readFileSync(f, 'utf8')).join('\n');
 
-/* 1 & 2 — publishing gate ------------------------------------------------- */
+/* 1 & 2 - publishing gate ------------------------------------------------- */
 
 for (const [collection, urlBase] of [
   ['projects', 'projects'],
@@ -93,13 +93,13 @@ for (const [collection, urlBase] of [
       fail(`${collection}/${entry.slug} is a draft but its title leaked into the site`);
     } else {
       pass(
-        `${collection}/${entry.slug} — ${shouldExist ? 'published, page present' : 'draft, correctly absent'}`,
+        `${collection}/${entry.slug} - ${shouldExist ? 'published, page present' : 'draft, correctly absent'}`,
       );
     }
   }
 }
 
-/* 3 — admin must not be indexed ------------------------------------------- */
+/* 3 - admin must not be indexed ------------------------------------------- */
 
 const robots = existsSync(join(DIST, 'robots.txt'))
   ? readFileSync(join(DIST, 'robots.txt'), 'utf8')
@@ -121,7 +121,7 @@ existsSync(adminHtml) && readFileSync(adminHtml, 'utf8').includes('noindex')
   ? pass('admin page carries a noindex robots tag')
   : fail('admin page missing or has no noindex tag');
 
-/* 4 — every internal link carries the base prefix --------------------------- */
+/* 4 - every internal link carries the base prefix --------------------------- */
 
 // On a subpath deploy a literal href="/projects" silently 404s. This catches any
 // link that skipped the url() helper.
@@ -130,7 +130,7 @@ const BASE = (readFileSync(join(ROOT, 'astro.config.mjs'), 'utf8').match(
 ) ?? [])[1];
 
 if (!BASE || BASE === '/') {
-  pass('site is served from the root — no base prefix needed');
+  pass('site is served from the root - no base prefix needed');
 } else {
   const knownRoutes = ['projects', 'blog', 'about', 'experience', 'contact', 'resume'];
   const offenders = [];
@@ -149,7 +149,7 @@ if (!BASE || BASE === '/') {
         .forEach((o) => fail(`link missing base prefix: ${o}`));
 }
 
-/* 5 — performance budget --------------------------------------------------- */
+/* 5 - performance budget --------------------------------------------------- */
 
 const oversized = htmlFiles
   .map((f) => ({ f, size: gzipSync(readFileSync(f)).length }))
@@ -165,7 +165,7 @@ oversized.length === 0
       ),
     );
 
-/* 5b — theme icons must not carry inline display styles --------------------- */
+/* 5b - theme icons must not carry inline display styles --------------------- */
 
 // An inline style beats every stylesheet rule, so a `style="display:none"` on
 // one of these hides it in *both* themes and the toggle renders as an empty box.
@@ -174,13 +174,32 @@ const inlineIconStyle = htmlFiles.some((f) => {
   return /<svg[^>]*class="icon-(sun|moon)"[^>]*style=/.test(html);
 });
 inlineIconStyle
-  ? fail('a theme icon has an inline style — it will be hidden in both themes')
+  ? fail('a theme icon has an inline style - it will be hidden in both themes')
   : pass('theme icons have no inline styles (CSS controls visibility)');
 
-/* 6 — CMS config must not use Decap-only options ---------------------------- */
+/* 5c - no long dashes in visible copy --------------------------------------- */
+
+// House style: plain hyphens only, no em or en dashes. Checked against the text
+// content of every page, so it also catches anything written in the CMS.
+const dashOffenders = [];
+for (const file of htmlFiles) {
+  const text = readFileSync(file, 'utf8')
+    .replace(/<script[\s\S]*?<\/script>/g, '')
+    .replace(/<style[\s\S]*?<\/style>/g, '')
+    .replace(/<[^>]+>/g, ' ');
+  const hit = text.match(/[^\s]{0,24}[\u2013\u2014][^\s]{0,24}/);
+  if (hit) dashOffenders.push(`${relative(DIST, file)}: "...${hit[0].trim()}..."`);
+}
+dashOffenders.length === 0
+  ? pass('no em or en dashes in visible copy')
+  : dashOffenders
+      .slice(0, 4)
+      .forEach((o) => fail(`long dash found - use a plain hyphen: ${o}`));
+
+/* 6 - CMS config must not use Decap-only options ---------------------------- */
 
 // Sveltia rejects the whole config on any of these and shows an error screen
-// instead of the admin panel — a failure you only see by opening /admin.
+// instead of the admin panel - a failure you only see by opening /admin.
 const cmsConfigPath = join(DIST, 'admin', 'config.yml');
 if (!existsSync(cmsConfigPath)) {
   fail('CMS config.yml missing from the build');
@@ -201,14 +220,14 @@ if (!existsSync(cmsConfigPath)) {
   const hits = banned.filter(([opt]) => new RegExp(`(^|\\s)${opt}\\s*:`, 'm').test(cms));
   hits.length === 0
     ? pass('CMS config uses no Decap-only options')
-    : hits.forEach(([opt, why]) => fail(`CMS config uses "${opt}" — ${why}`));
+    : hits.forEach(([opt, why]) => fail(`CMS config uses "${opt}" - ${why}`));
 
   /^\s*repo:\s*[\w.-]+\/[\w.-]+\s*$/m.test(cms)
     ? pass('CMS backend repo is in owner/repo form')
     : fail('CMS backend repo must be "owner/repo", not a URL');
 }
 
-/* 7 — the CV must actually be downloadable --------------------------------- */
+/* 7 - the CV must actually be downloadable --------------------------------- */
 
 const resumeDir = join(DIST, 'resume');
 existsSync(resumeDir) && readdirSync(resumeDir).some((f) => f.endsWith('.pdf'))
@@ -218,6 +237,6 @@ existsSync(resumeDir) && readdirSync(resumeDir).some((f) => f.endsWith('.pdf'))
 /* ------------------------------------------------------------------------- */
 
 console.log(
-  `\n${checks - failures}/${checks} checks passed${failures ? ` — ${failures} FAILED` : ''}\n`,
+  `\n${checks - failures}/${checks} checks passed${failures ? ` - ${failures} FAILED` : ''}\n`,
 );
 process.exit(failures ? 1 : 0);

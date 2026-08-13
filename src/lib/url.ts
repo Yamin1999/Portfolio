@@ -2,7 +2,7 @@
  * Base-aware internal links.
  *
  * Astro rewrites bundled asset URLs when `base` is set, but it does NOT touch
- * hand-written hrefs — a literal href="/projects" points at the domain root and
+ * hand-written hrefs - a literal href="/projects" points at the domain root and
  * 404s on a project-path deploy. Every internal link goes through here instead,
  * so the site works whether it's served from the root or from a subpath.
  *
@@ -17,7 +17,7 @@ export function url(path: string): string {
 
 /**
  * For files uploaded through the CMS. Same base handling as url(), plus percent
- * encoding — uploaded filenames routinely contain spaces ("Screenshot from
+ * encoding - uploaded filenames routinely contain spaces ("Screenshot from
  * 2024-12-13 21-25-31.png") and an unencoded space breaks the src attribute.
  */
 export function asset(path: string): string {

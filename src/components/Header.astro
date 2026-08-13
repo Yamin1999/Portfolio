@@ -2,7 +2,7 @@
 import site from '../data/site.json';
 import { url } from '../lib/url';
 
-// Compare against the based path — Astro.url.pathname includes the base prefix,
+// Compare against the based path - Astro.url.pathname includes the base prefix,
 // so a bare '/about' would never match on a subpath deploy.
 const path = Astro.url.pathname.replace(/\/$/, '');
 const isCurrent = (href: string) => {

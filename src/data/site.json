@@ -6,9 +6,9 @@
   "email": "yaminhaque1999@gmail.com",
   "photo": "/uploads/yamin-640.webp",
   "availability": "Open to embedded software roles",
-  "heroIntro": "I build and debug C for ARM-based carrier Ethernet switches running embedded Linux and VxWorks — Layer 2 protocols, standards-compliant implementations, and the kernel tracing it takes to make them converge reliably.",
+  "heroIntro": "I build and debug C for ARM-based carrier Ethernet switches running embedded Linux and VxWorks - Layer 2 protocols, standards-compliant implementations, and the kernel tracing it takes to make them converge reliably.",
   "currentFocus": "Around three years of C and Embedded C on carrier Ethernet switching, working command-line first with GCC, GDB and ftrace. Currently open to embedded software and systems roles.",
-  "bio": "Software Engineer (R&D) with around three years developing and debugging C / Embedded C software for ARM-based carrier Ethernet switches running embedded Linux. Experienced in Layer 2 networking, Carrier Ethernet protocols, routing and switching, network security, and standards-based protocol implementation.\n\nStrong expertise in low-level C programming — pointers, bitwise operations, type casting, structure packing, byte-order handling and memory management. Skilled in HAL/driver integration, event-driven hardware notification handling, TCP/UDP communication, performance analysis and embedded debugging.\n\nComfortable with command-line, no-IDE development and debugging workflows, with a solid foundation in microcontrollers and RTOS. Familiar with AI and deep learning technologies, and experienced in collaborating with overseas engineering teams and clients using professional working English.",
+  "bio": "Software Engineer (R&D) with around three years developing and debugging C / Embedded C software for ARM-based carrier Ethernet switches running embedded Linux. Experienced in Layer 2 networking, Carrier Ethernet protocols, routing and switching, network security, and standards-based protocol implementation.\n\nStrong expertise in low-level C programming - pointers, bitwise operations, type casting, structure packing, byte-order handling and memory management. Skilled in HAL/driver integration, event-driven hardware notification handling, TCP/UDP communication, performance analysis and embedded debugging.\n\nComfortable with command-line, no-IDE development and debugging workflows, with a solid foundation in microcontrollers and RTOS. Familiar with AI and deep learning technologies, and experienced in collaborating with overseas engineering teams and clients using professional working English.",
   "interests": [
     "Layer 2 and Carrier Ethernet protocol implementation",
     "Embedded Linux internals and kernel tracing",
@@ -27,11 +27,11 @@
   },
   "contact": {
     "formEndpoint": "",
-    "note": "Leave empty to use FormSubmit with the email above — no signup, but you must click the confirmation link FormSubmit emails you after the very first message. To use a different provider (Formspree, Web3Forms), paste its endpoint URL here and it takes over."
+    "note": "Leave empty to use FormSubmit with the email above - no signup, but you must click the confirmation link FormSubmit emails you after the very first message. To use a different provider (Formspree, Web3Forms), paste its endpoint URL here and it takes over."
   },
   "seo": {
-    "title": "Yamin Haque — Embedded Software Engineer",
-    "description": "Embedded software engineer working in C on ARM-based carrier Ethernet switches — Layer 2 protocols, embedded Linux, VxWorks, and low-level debugging.",
+    "title": "Yamin Haque - Embedded Software Engineer",
+    "description": "Embedded software engineer working in C on ARM-based carrier Ethernet switches - Layer 2 protocols, embedded Linux, VxWorks, and low-level debugging.",
     "ogImage": ""
   },
   "sections": {

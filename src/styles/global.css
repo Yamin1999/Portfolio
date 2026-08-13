@@ -2,7 +2,7 @@
    Design tokens
 
    Palette: blue-biased neutrals, a desaturated teal primary, and a copper
-   secondary — Ethernet copper and the amber of a link-state LED. Monospace is
+   secondary - Ethernet copper and the amber of a link-state LED. Monospace is
    used structurally (labels, metadata, eyebrows), not just for code.
    ========================================================================== */
 
@@ -293,7 +293,7 @@ main {
 }
 
 /* Link-state indicator: the site's one piece of ambient motion, and it means
-   something — a switch port showing "up". */
+   something - a switch port showing "up". */
 .brand__led {
   width: 8px;
   height: 8px;
@@ -378,7 +378,7 @@ main {
 
 /* Icon visibility across all three theme states. The icon shows what clicking
    will DO: a moon on a light page, a sun on a dark one.
-   Never put `display` on these icons inline in the markup — an inline style
+   Never put `display` on these icons inline in the markup - an inline style
    beats every rule here and hides both icons at once. */
 
 /* 1. Default and explicit light: show the moon. */
@@ -596,7 +596,7 @@ main {
   margin-bottom: 4.5rem;
 }
 
-/* Faint engineering grid — the ground the rest of the page sits on. */
+/* Faint engineering grid - the ground the rest of the page sits on. */
 .hero-band::before {
   content: '';
   position: absolute;
@@ -651,7 +651,7 @@ main {
   line-height: 1.6;
 }
 
-/* Portrait, ringed by a G.8032 protection ring — four nodes, one link blocked.
+/* Portrait, ringed by a G.8032 protection ring - four nodes, one link blocked.
    It's the topology the professional work is about, not an abstract flourish. */
 .hero__figure {
   position: relative;
@@ -800,7 +800,7 @@ main {
     box-shadow 0.18s ease;
 }
 
-/* Category stripe — colour encodes the discipline, not decoration. */
+/* Category stripe - colour encodes the discipline, not decoration. */
 .card::before {
   content: '';
   position: absolute;

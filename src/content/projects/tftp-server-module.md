@@ -70,7 +70,7 @@ The pieces worth calling out:
 
 - **Option negotiation.** The initial read or write request carries the client's
   proposed options. The server clamps each to what it can support and replies
-  with an OACK naming only the options it accepted — never options the client
+  with an OACK naming only the options it accepted - never options the client
   did not offer.
 - **Retransmission.** Each transfer keeps a timer and a retry counter. Timeouts,
   retry limits and the UDP port are all operator-configurable through the CLI,
@@ -87,7 +87,7 @@ The pieces worth calling out:
 
 Almost all of the interesting bugs were visible only on the wire. Wireshark
 captures of complete transfer sessions showed option negotiation, block
-sequencing and the precise point where a window stalled — a class of bug that is
+sequencing and the precise point where a window stalled - a class of bug that is
 effectively invisible from inside the process, because the server's own view is
 simply "no ACK arrived."
 

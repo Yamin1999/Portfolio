@@ -3,13 +3,13 @@ import { glob } from 'astro/loaders';
 
 /**
  * These schemas are the contract between the CMS and the site.
- * Every field here must match a field in public/admin/config.yml —
+ * Every field here must match a field in public/admin/config.yml -
  * if they drift, the build fails instead of shipping a broken page.
  */
 
 /**
  * The CMS writes `''` for optional fields you leave blank, and an empty string
- * is not a valid URL — so a plain `.url().optional()` fails the build the first
+ * is not a valid URL - so a plain `.url().optional()` fails the build the first
  * time you save a project without a repo link. Treat blank as absent.
  */
 const blankToUndefined = (value: unknown) =>

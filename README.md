@@ -1,7 +1,7 @@
-# Portfolio — Yamin Haque
+# Portfolio - Yamin Haque
 
 Static site built with [Astro](https://astro.build), content edited through
-[Sveltia CMS](https://sveltiacms.app) at `/admin`. No server, no database — the
+[Sveltia CMS](https://sveltiacms.app) at `/admin`. No server, no database - the
 CMS writes Markdown and JSON straight to this repository, and a push rebuilds
 the site.
 
@@ -37,14 +37,14 @@ npm run verify     # build + run the build checks
 
 ## Editing content
 
-Two ways, and they're equivalent — both end up as files in this repo:
+Two ways, and they're equivalent - both end up as files in this repo:
 
 **In the browser** at `https://yoursite.com/admin`. Sign in with a GitHub
-personal access token ("Sign In with Token" on the login screen — no OAuth app
+personal access token ("Sign In with Token" on the login screen - no OAuth app
 needed for a single user). Saving commits to `main` and the site rebuilds in
 about a minute.
 
-**In an editor** — the files are plain Markdown under `src/content/`.
+**In an editor** - the files are plain Markdown under `src/content/`.
 
 ### Content layout
 
@@ -62,13 +62,19 @@ public/uploads/                Images uploaded through the CMS
 ### Publishing rules
 
 - `published: false` → no page is generated at all. Not hidden, not
-  unreachable-by-URL — it does not exist in the build.
+  unreachable-by-URL - it does not exist in the build.
 - `publishedAt` in the future → same thing, until that date passes.
 - Ordering is `featured` first, then `order` ascending, then newest.
 - The filename is the URL slug. **Renaming a file changes the URL**, so don't
   rename one you've already put on a CV.
 
 `npm run verify` enforces the first two rules on every build.
+
+### House style
+
+Plain hyphens only. No em dashes and no en dashes anywhere in visible copy,
+including anything written through the CMS. `npm run verify` fails the build if
+one appears, and names the page it found it on.
 
 ---
 
@@ -92,28 +98,29 @@ In the repo: **Settings → Pages → Source → "GitHub Actions"**.
 
 The workflow in `.github/workflows/deploy.yml` builds, runs the checks, and
 deploys. First deploy takes a couple of minutes; after that every push to `main`
-redeploys — including the commits the CMS makes when you save from `/admin`.
+redeploys - including the commits the CMS makes when you save from `/admin`.
 
 If a push asks for a password, use a personal access token, not your account
 password. The same token works for the CMS.
 
 ### Still open
 
-- **CV PDF** — `public/resume/Yamin_Haque_Resume.pdf` is publicly downloadable
+- **CV PDF** - `public/resume/Yamin_Haque_Resume.pdf` is publicly downloadable
   and contains your phone number and your reference's name, phone and email.
   Export a web version without the References section and replace it.
-- **Contact form** — set `contact.formEndpoint` in `src/data/site.json` to a
-  [Formspree](https://formspree.io) URL to switch the form on. Left empty, the
-  contact page shows your email address instead of a form that would silently
-  swallow messages.
-- **Custom domain** — if you buy one, set `site` to the domain and `base` to
+- **Contact form** - posts through [FormSubmit](https://formsubmit.co), which
+  needs no account but requires you to click a confirmation link the first time
+  a message is sent. Send yourself one test message and confirm it, or nothing
+  will arrive. To use another provider instead, put its endpoint in
+  `src/data/site.json` under `contact.formEndpoint`.
+- **Custom domain** - if you buy one, set `site` to the domain and `base` to
   `'/'` in `astro.config.mjs`, update `public/robots.txt`, and add the domain
   under Settings → Pages. Everything else follows automatically.
 
 ### Note on `robots.txt`
 
 On a subpath deploy this file is served at `/Portfolio/robots.txt`, and crawlers
-only read the one at the domain root — so it has no effect today. The admin panel
+only read the one at the domain root - so it has no effect today. The admin panel
 is kept out of search by its own `noindex` meta tag and by being excluded from
 the sitemap, which is what actually matters. A custom domain fixes this properly.
 

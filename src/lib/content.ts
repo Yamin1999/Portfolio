@@ -2,7 +2,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 /**
  * The single gate every public query goes through. A draft, or an entry with a
- * future publish date, is invisible to visitors — there is no second code path
+ * future publish date, is invisible to visitors - there is no second code path
  * that could accidentally leak one.
  */
 const isLive = (entry: { data: { published: boolean; publishedAt: Date } }) =>
@@ -67,11 +67,11 @@ export function formatDate(date: Date): string {
 
 export function formatRange(start: Date, end?: Date, ongoing = false): string {
   const from = formatMonthYear(start);
-  if (ongoing || !end) return `${from} — Present`;
-  return `${from} — ${formatMonthYear(end)}`;
+  if (ongoing || !end) return `${from} - Present`;
+  return `${from} - ${formatMonthYear(end)}`;
 }
 
-/** "3 yr 4 mo" — shown beside role dates so duration doesn't need mental maths. */
+/** "3 yr 4 mo" - shown beside role dates so duration doesn't need mental maths. */
 export function formatDuration(start: Date, end?: Date): string {
   const to = end ?? new Date();
   let months =

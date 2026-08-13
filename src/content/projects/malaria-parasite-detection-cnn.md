@@ -33,7 +33,7 @@ smears and identify parasites cell by cell. It is slow, it does not scale to the
 settings where malaria is most common, and accuracy depends on the examiner.
 
 Automated classification is a natural fit, and the usual approach is transfer
-learning — take a large network pre-trained on general image data and fine-tune
+learning - take a large network pre-trained on general image data and fine-tune
 it. That works, but it inherits a model far larger than the task requires, which
 matters if the goal is deployment on modest hardware in a clinic rather than a
 benchmark number on a workstation.
@@ -43,7 +43,7 @@ learning on this task?
 
 ## Dataset
 
-**27,578 single-cell images**, split between parasitised and uninfected cells —
+**27,578 single-cell images**, split between parasitised and uninfected cells -
 each image a single segmented cell rather than a whole smear, which makes the
 task a binary classification problem on a consistent input.
 
@@ -61,7 +61,7 @@ published accuracy figures stop being reproducible.
 
 ## Results
 
-**96.41% common accuracy** across the five folds — close to what transfer
+**96.41% common accuracy** across the five folds - close to what transfer
 learning achieves on the same dataset, from a substantially simpler and more
 computationally efficient model.
 
@@ -75,4 +75,4 @@ constrained hardware.
 Model size is a design constraint, not an afterthought. It is easy to reach for
 the largest pre-trained network available and report the accuracy it gives you;
 it is more useful to ask what the smallest model that meets the requirement looks
-like — which is the same instinct that embedded work rewards.
+like - which is the same instinct that embedded work rewards.

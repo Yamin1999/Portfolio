@@ -1,6 +1,6 @@
 ---
 title: Layer 2 Protocol Development for Carrier Ethernet Switches
-summary: Design, implementation and maintenance of Layer 2 features — ERPS ring protection, MSTP, LLDP, CFM/OAM, VLAN and SNMP — on ARM-based carrier Ethernet switches, against IEEE and ITU-T standards.
+summary: Design, implementation and maintenance of Layer 2 features - ERPS ring protection, MSTP, LLDP, CFM/OAM, VLAN and SNMP - on ARM-based carrier Ethernet switches, against IEEE and ITU-T standards.
 category: Networking & Protocols
 context: professional
 organization: Shanghai BDCOM
@@ -40,7 +40,7 @@ publishedAt: 2026-07-31
 Over three years I designed, implemented and maintained Layer 2 networking
 features for ARM-based carrier Ethernet switches running embedded Linux and
 VxWorks: ERPS (G.8032) ring protection, EAPS, MSTP, LLDP, CFM/OAM, VLAN handling
-and SNMP instrumentation — each implemented against its IEEE or ITU-T
+and SNMP instrumentation - each implemented against its IEEE or ITU-T
 specification.
 
 ## Problem
@@ -67,7 +67,7 @@ and port state changes.
 
 Working from that shape, my approach was consistent across features:
 
-1. **Read the specification first and model the state machine explicitly** —
+1. **Read the specification first and model the state machine explicitly** -
    states, events, transitions and timers written down before code, so the
    implementation could be checked against the document rather than against
    intuition.
@@ -94,7 +94,7 @@ Recurring engineering concerns across these features:
 - **Ring protection state.** G.8032's value is that the ring protection link is
   blocked in the idle state and unblocked on failure, so the topology is
   loop-free at every instant. The implementation work is making sure the FDB is
-  flushed at exactly the right point in the transition — too early and traffic is
+  flushed at exactly the right point in the transition - too early and traffic is
   black-holed, too late and it loops.
 - **64-bit counters and statistics.** SNMP-visible counters must be monotonic and
   wrap correctly, which is a real source of low-level bugs on 32-bit-oriented
@@ -107,14 +107,14 @@ This is where most of the time went, and where the useful skills live.
 - **Wireshark** for protocol conformance: capture both sides of an
   interoperability failure and the disagreement is usually visible in a single
   field of a single PDU.
-- **Scapy** for crafting PDUs by hand — the fastest way to drive a state machine
+- **Scapy** for crafting PDUs by hand - the fastest way to drive a state machine
   into a transition that is awkward to reach with real equipment, including
   malformed frames to confirm the parser rejects them safely.
 - **trace-cmd, ftrace and KernelShark** for timing questions. When convergence
   is slower than expected, the question is _where the time went_ between the
   hardware notification and the port state change, and a kernel trace answers it
   directly instead of by inference.
-- **GDB** for the low-level faults — pointer and memory issues, packed-structure
+- **GDB** for the low-level faults - pointer and memory issues, packed-structure
   misreads, and byte-order mistakes.
 
 ## Results
@@ -129,7 +129,7 @@ This is where most of the time went, and where the useful skills live.
 ## Lessons learned
 
 Reading the specification carefully is faster than debugging. A significant share
-of the hard problems I saw traced back to a clause that had been skimmed — a
+of the hard problems I saw traced back to a clause that had been skimmed - a
 timer's exact start condition, or precisely which event triggers an FDB flush.
 The document is dense, but it is dense because the failure modes are subtle, and
 an afternoon spent with it routinely saved a week of packet captures.

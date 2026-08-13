@@ -1,6 +1,6 @@
 ---
 title: Embedded C & Low-Level Development
-summary: Three years of C and Embedded C on ARM-based carrier Ethernet switches running embedded Linux — memory, pointers, packed structures, byte order, and the debugging discipline a no-IDE workflow demands.
+summary: Three years of C and Embedded C on ARM-based carrier Ethernet switches running embedded Linux - memory, pointers, packed structures, byte order, and the debugging discipline a no-IDE workflow demands.
 category: Embedded Systems
 context: professional
 organization: Shanghai BDCOM
@@ -63,7 +63,7 @@ assumed.
 
 **Byte-order conversion.** Network byte order is big-endian; the host may not be.
 Every multi-byte field crossing the boundary needs explicit conversion. Miss one
-and you get a field that reads as a plausible but wrong number — the worst kind
+and you get a field that reads as a plausible but wrong number - the worst kind
 of bug, because nothing crashes.
 
 **64-bit counters on 32-bit-oriented paths.** Statistics counters must be
@@ -78,7 +78,7 @@ compiler and all capable of producing corruption on the target.
 
 ## Debugging technique
 
-- **GDB** as the primary instrument — breakpoints, watchpoints on corrupted
+- **GDB** as the primary instrument - breakpoints, watchpoints on corrupted
   variables to catch the write rather than the read, and inspection of raw memory
   when a structure does not look the way it should.
 - **ftrace and trace-cmd** for questions about time and ordering rather than
@@ -90,7 +90,7 @@ compiler and all capable of producing corruption on the target.
 
 ## Adjacent work
 
-- **HAL and driver integration** — the boundary between protocol logic and the
+- **HAL and driver integration** - the boundary between protocol logic and the
   switching hardware underneath it.
 - **Event-driven hardware notification handling**, so link events propagate
   immediately rather than at the next poll.
@@ -101,7 +101,7 @@ compiler and all capable of producing corruption on the target.
 ## Lessons learned
 
 On embedded targets, reproducing a bug reliably is most of the work; fixing it is
-usually the short part. Effort spent making a failure deterministic — narrowing
-the trigger, capturing the exact frame, pinning the timing — pays for itself
+usually the short part. Effort spent making a failure deterministic - narrowing
+the trigger, capturing the exact frame, pinning the timing - pays for itself
 immediately, because a bug you can reproduce on demand is a bug you can fix in an
 afternoon, and one you cannot is a bug you argue about for a week.

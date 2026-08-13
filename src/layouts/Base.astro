@@ -21,9 +21,9 @@ const {
   jsonLd,
 } = Astro.props;
 
-// Name first on every page — the browser tab is often truncated, and the half
+// Name first on every page - the browser tab is often truncated, and the half
 // worth keeping is who this is, not which section you're on.
-const pageTitle = title ? `${site.name} — ${title}` : site.seo.title;
+const pageTitle = title ? `${site.name} - ${title}` : site.seo.title;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = site.seo.ogImage
   ? new URL(site.seo.ogImage, Astro.site).href
@@ -40,8 +40,9 @@ const ogImage = site.seo.ogImage
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href={url('/sitemap-index.xml')} />
 
-    <link rel="icon" href={url('/favicon.ico')} sizes="32x32" />
-    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={url('/favicon.ico')} sizes="16x16 32x32 48x48" />
+    <link rel="icon" href={url('/favicon-32.png')} type="image/png" sizes="32x32" />
+    <link rel="icon" href={url('/favicon-192.png')} type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
 
     <meta property="og:type" content={ogType} />

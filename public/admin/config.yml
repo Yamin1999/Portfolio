@@ -1,7 +1,7 @@
 # Sveltia CMS configuration
 #
 # Every field here maps to a field in src/content.config.ts. If the two drift
-# apart the build fails loudly instead of publishing a broken page — that is the
+# apart the build fails loudly instead of publishing a broken page - that is the
 # intended behaviour, so change both together.
 #
 # Sign in with "Sign In with Token" on the login screen and paste a GitHub
@@ -9,7 +9,7 @@
 
 backend:
   name: github
-  # Must be "owner/repo" — a full URL here will fail to load.
+  # Must be "owner/repo" - a full URL here will fail to load.
   repo: Yamin1999/Portfolio
   branch: main
   commit_messages:
@@ -35,7 +35,7 @@ collections:
     create: true
     slug: '{{title}}'
     identifier_field: title
-    summary: '{{title}} — {{category}}'
+    summary: '{{title}} - {{category}}'
     sortable_fields: [order, publishedAt, title]
     fields:
       - { name: title, label: Title, widget: string }
@@ -129,7 +129,7 @@ collections:
           label: Published,
           widget: boolean,
           default: false,
-          hint: Off keeps it a draft — no page is generated and it is invisible to visitors.,
+          hint: Off keeps it a draft - no page is generated and it is invisible to visitors.,
         }
       - {
           name: publishedAt,
@@ -184,7 +184,7 @@ collections:
     create: true
     slug: '{{company}}'
     identifier_field: position
-    summary: '{{position}} — {{company}}'
+    summary: '{{position}} - {{company}}'
     fields:
       - { name: company, label: Company, widget: string }
       - {
