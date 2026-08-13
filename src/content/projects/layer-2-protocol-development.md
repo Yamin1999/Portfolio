@@ -23,6 +23,11 @@ standards:
   - IEEE 802.1AB
   - IEEE 802.1ag
   - IEEE 802.1s
+cover: /uploads/Screenshot from 2024-12-13 21-25-31.png
+repo: ''
+demo: ''
+docs: ''
+video: ''
 confidentiality: Written at the level of protocol behaviour and engineering approach. Product internals, source and customer specifics remain confidential to the employer.
 featured: true
 order: 2
@@ -106,7 +111,7 @@ This is where most of the time went, and where the useful skills live.
   into a transition that is awkward to reach with real equipment, including
   malformed frames to confirm the parser rejects them safely.
 - **trace-cmd, ftrace and KernelShark** for timing questions. When convergence
-  is slower than expected, the question is *where the time went* between the
+  is slower than expected, the question is _where the time went_ between the
   hardware notification and the port state change, and a kernel trace answers it
   directly instead of by inference.
 - **GDB** for the low-level faults — pointer and memory issues, packed-structure
