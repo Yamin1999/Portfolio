@@ -1,6 +1,6 @@
 ---
 company: Shanghai BDCOM Information Technology Co., Ltd.
-companyUrl: ''
+companyUrl: https://bdcomnetworks.com/
 position: Software Engineer (R&D)
 employmentType: Full-time
 location: Banani, Dhaka (Bangladesh office)
