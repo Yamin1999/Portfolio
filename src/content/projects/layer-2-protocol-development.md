@@ -23,7 +23,7 @@ standards:
   - IEEE 802.1AB
   - IEEE 802.1ag
   - IEEE 802.1s
-cover: /uploads/Screenshot from 2024-12-13 21-25-31.png
+cover: /uploads/4ad7b3ec-d732-42ca-9f89-d827bf685f7b.png
 repo: ''
 demo: ''
 docs: ''
