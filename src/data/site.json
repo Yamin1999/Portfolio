@@ -15,7 +15,7 @@
     "Low-level performance analysis and debugging",
     "RTOS and microcontroller firmware"
   ],
-  "resume": "/resume/Yamin_Haque_Resume.pdf",
+  "resume": "/uploads/Yamin_Haque_resume.pdf",
   "resumeLabel": "Download CV (PDF)",
   "social": {
     "github": "https://github.com/Yamin1999",
@@ -31,7 +31,7 @@
   },
   "seo": {
     "title": "Yamin Haque - Embedded Software Engineer",
-    "description": "Embedded software engineer working in C on ARM-based carrier Ethernet switches - Layer 2 protocols, embedded Linux, VxWorks, and low-level debugging.",
+    "description": "Embedded Software Engineer with 3+ years of experience developing, debugging, and maintaining C/Embedded C software for ARM-based systems running Embedded Linux and VxWorks. Experienced in firmware development, MCU architecture, hardware/software interfacing, peripheral communication, and low-level debugging. Hands-on experience with STM32 microcontrollers, GPIO, ADC, SPI, I2C, UART, EXTI, timers, and sensor integration through bare-metal firmware development. Strong background in embedded networking, protocol implementation, system-level troubleshooting, and standards-based development. Experienced with GDB, GCC, Wireshark, kernel tracing, and command-line development workflows. Comfortable collaborating with cross functional and overseas engineering teams to develop, test, debug, and deliver reliable embedded products.",
     "ogImage": ""
   },
   "sections": {
