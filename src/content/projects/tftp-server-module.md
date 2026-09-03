@@ -19,7 +19,7 @@ standards:
   - RFC 1350
   - RFC 2348
   - RFC 7440
-cover: /uploads/Screenshot from 2026-09-03 21-43-12.png
+cover: /uploads/Screenshot from 2026-09-03 22-03-02.png
 repo: https://github.com/Yamin1999/TFTP-Server-Panda
 demo: ''
 docs: ''
