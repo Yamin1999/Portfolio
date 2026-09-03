@@ -19,7 +19,12 @@ standards:
   - RFC 1350
   - RFC 2348
   - RFC 7440
+cover: /uploads/Screenshot from 2026-09-03 21-43-12.png
 repo: https://github.com/Yamin1999/TFTP-Server-Panda
+demo: ''
+docs: ''
+video: ''
+confidentiality: ''
 featured: true
 order: 1
 published: true
@@ -106,7 +111,7 @@ block size.
 ## Lessons learned
 
 The final-block edge case is where TFTP implementations go wrong. A transfer ends
-when a data block is *shorter* than the negotiated block size, which means a file
+when a data block is _shorter_ than the negotiated block size, which means a file
 whose length is an exact multiple of the block size must end with a zero-length
 data block. Getting that wrong produces a server that works perfectly until
 someone transfers a file of exactly the wrong size.
